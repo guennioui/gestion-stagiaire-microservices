@@ -1,0 +1,18 @@
+server:
+  port: 9095
+
+spring:
+  application:
+    name: API-GATEWAY-SERVICE
+  cloud:
+    gateway:
+      routes:
+        - id : stagiaire-microservice
+          uri : lb://STAGIAIRE-SERVICE
+          predicates:
+            - Path= /api/stagiaire/**
+        - id: stage-microservice
+          uri : lb://STAGE-SERVICE
+          predicates:
+            - Path= /api/stage/**
+
