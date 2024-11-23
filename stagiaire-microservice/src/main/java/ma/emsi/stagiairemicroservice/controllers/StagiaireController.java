@@ -1,5 +1,6 @@
 package ma.emsi.stagiairemicroservice.controllers;
 
+import ma.emsi.stagiairemicroservice.dtos.StagiaireDto;
 import ma.emsi.stagiairemicroservice.entities.Stagiaire;
 import ma.emsi.stagiairemicroservice.errors.ErrorResponse;
 import ma.emsi.stagiairemicroservice.exceptions.StagiaireAlreadyExistException;
@@ -23,19 +24,21 @@ public class StagiaireController {
     }
 
     @PostMapping(path = "/add-stagiaire")
-    public ResponseEntity<Stagiaire> addNewStagiaire(@RequestBody Stagiaire stagiaire) throws
+    public ResponseEntity<StagiaireDto> addNewStagiaire(@RequestBody StagiaireDto stagiaireDto) throws
             StagiaireAlreadyExistException {
         Stagiaire optionalStagiaire = null;
         try{
-            optionalStagiaire = this.stagiaireService.findByMatricule(stagiaire.getMatricule());
+            optionalStagiaire = this.stagiaireService.findByMatricule(stagiaireDto.getMatricule());
         }catch(StagiaireNotFoundException exception){
             System.out.println(exception.getMessage());
         }
         if(optionalStagiaire != null){
             throw new StagiaireAlreadyExistException("le stagiaire que vous tentez de l'ajouté existe déja");
         }
-        this.stagiaireService.addStagiaire(stagiaire);
-        return ResponseEntity.ok(stagiaire);
+        this.stagiaireService.addStagiaire(
+         this.stagiaireService.stagiaireDTOToStagiaire(stagiaireDto)
+        );
+        return ResponseEntity.ok(stagiaireDto);
     }
 
     @DeleteMapping(path = "/delete-stagiaire/{matricule}")
@@ -45,18 +48,20 @@ public class StagiaireController {
     }
 
     @PutMapping(path = "/update-stagiaire/{matricule}")
-    public ResponseEntity<Stagiaire> updateStagiaire(@PathVariable String matricule, @RequestBody Stagiaire stagiaire) throws StagiaireNotFoundException {
-        this.stagiaireService.updateStagiaire(matricule, stagiaire);
-        return ResponseEntity.ok(stagiaire);
+    public ResponseEntity<StagiaireDto> updateStagiaire(@PathVariable String matricule, @RequestBody StagiaireDto stagiaireDto) throws StagiaireNotFoundException {
+        this.stagiaireService.updateStagiaire(matricule, stagiaireDto);
+        return ResponseEntity.ok(stagiaireDto);
     }
 
     @GetMapping(path = "/{matricule}")
-    public ResponseEntity<Stagiaire> findStagiaireByMatricule(@PathVariable String matricule) throws StagiaireNotFoundException {
-        return ResponseEntity.ok(this.stagiaireService.findByMatricule(matricule));
+    public ResponseEntity<StagiaireDto> findStagiaireByMatricule(@PathVariable String matricule) throws StagiaireNotFoundException {
+        Stagiaire findByMatricule = this.stagiaireService.findByMatricule(matricule);
+        StagiaireDto result = this.stagiaireService.stagiaireToStagiaireDTO(findByMatricule);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping(path = "/get-all")
-    public ResponseEntity<List<Stagiaire>> findAllStagiaire(){
+    public ResponseEntity<List<StagiaireDto>> findAllStagiaire(){
         return ResponseEntity.ok(this.stagiaireService.getAll());
     }
 

@@ -1,12 +1,15 @@
 package ma.emsi.stagiairemicroservice.services.IServiceImpl;
 
+import ma.emsi.stagiairemicroservice.dtos.StagiaireDto;
 import ma.emsi.stagiairemicroservice.entities.Stagiaire;
 import ma.emsi.stagiairemicroservice.exceptions.StagiaireNotFoundException;
+import ma.emsi.stagiairemicroservice.mappers.StagiaireMapper;
 import ma.emsi.stagiairemicroservice.repositories.StagiaireRepository;
 import ma.emsi.stagiairemicroservice.services.IService.IStagiaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,14 +35,16 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     }
 
     @Override
-    public void updateStagiaire(String matricule, Stagiaire stagiaire) throws StagiaireNotFoundException {
+    public void updateStagiaire(String matricule, StagiaireDto stagiaireDto) throws StagiaireNotFoundException {
         Stagiaire optionalStagiaire = this.findByMatricule(matricule);
         System.out.println(optionalStagiaire);
         if(optionalStagiaire!=null){
-            optionalStagiaire.setDateOfBirth(stagiaire.getDateOfBirth());
-            optionalStagiaire.setFirstName(stagiaire.getFirstName());
-            optionalStagiaire.setLastName(stagiaire.getLastName());
-            System.out.println(optionalStagiaire);
+            optionalStagiaire.setMatricule(stagiaireDto.getMatricule());
+            optionalStagiaire.setFirstName(stagiaireDto.getFirstName());
+            optionalStagiaire.setLastName(stagiaireDto.getLastName());
+            optionalStagiaire.setEmail(stagiaireDto.getEmail());
+            optionalStagiaire.setPhoneNumber(stagiaireDto.getPhoneNumber());
+            optionalStagiaire.setSchoolName(stagiaireDto.getSchoolName());
             this.stagiaireRepository.save(optionalStagiaire);
         }
     }
@@ -54,7 +59,23 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     }
 
     @Override
-    public List<Stagiaire> getAll() {
-        return this.stagiaireRepository.findAll();
+    public List<StagiaireDto> getAll() {
+        List<StagiaireDto> stagiaireDtos = new ArrayList<>();
+        for(Stagiaire stagiaire : this.stagiaireRepository.findAll()){
+            stagiaireDtos.add(
+                    this.stagiaireToStagiaireDTO(stagiaire)
+            );
+        }
+        return stagiaireDtos;
+    }
+
+    @Override
+    public StagiaireDto stagiaireToStagiaireDTO(Stagiaire stagiaire) {
+        return StagiaireMapper.INSTANCE.stagiaireToStagiaireDTO(stagiaire);
+    }
+
+    @Override
+    public Stagiaire stagiaireDTOToStagiaire(StagiaireDto stagiaireDto) {
+        return StagiaireMapper.INSTANCE.stagiaireDTOToStagiaire(stagiaireDto);
     }
 }

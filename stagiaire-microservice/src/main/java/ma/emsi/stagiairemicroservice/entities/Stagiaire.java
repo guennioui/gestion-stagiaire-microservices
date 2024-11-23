@@ -19,5 +19,7 @@ public class Stagiaire {
     private String matricule;
     private String lastName;
     private String firstName;
-    private LocalDate dateOfBirth;
+    private String email;
+    private String phoneNumber;
+    private String schoolName;
 }
