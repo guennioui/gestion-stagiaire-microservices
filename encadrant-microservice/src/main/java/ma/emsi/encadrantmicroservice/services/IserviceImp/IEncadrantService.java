@@ -1,0 +1,19 @@
+package ma.emsi.encadrantmicroservice.services.IserviceImp;
+
+import ma.emsi.encadrantmicroservice.dtos.EncadrantDto;
+import ma.emsi.encadrantmicroservice.entities.Encadrant;
+import ma.emsi.encadrantmicroservice.exceptions.EncadrantAlreadyExistException;
+import ma.emsi.encadrantmicroservice.exceptions.EncadrantNotFoundException;
+
+import java.util.List;
+
+public interface IEncadrantService {
+
+    void addEncadrant(EncadrantDto encadrantDto) throws EncadrantNotFoundException, EncadrantAlreadyExistException;
+    void deleteEncadrant(Long id) throws EncadrantNotFoundException;
+    void updateEncadrant(Long EncadrantId, EncadrantDto encadrantDto) throws EncadrantNotFoundException;
+    List<EncadrantDto> getAll();
+    Encadrant findEncadrantByMatricule(Long matricule) throws EncadrantNotFoundException;
+    Encadrant encadrantDtoToEncadrant(EncadrantDto encadrantDto);
+    EncadrantDto encadrantToEncadrantDto(Encadrant encadrant);
+}
