@@ -1,12 +1,11 @@
 package ma.emsi.stagiairemicroservice.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import ma.emsi.stagiairemicroservice.dtos.StageDto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Setter @Getter @ToString
@@ -22,4 +21,6 @@ public class Stagiaire {
     private String email;
     private String phoneNumber;
     private String schoolName;
+    @Transient
+    private List<StageDto> stages;
 }
