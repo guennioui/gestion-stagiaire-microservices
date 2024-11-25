@@ -1,14 +1,14 @@
 package ma.emsi.stagemicroservice.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ma.emsi.stagemicroservice.dtos.StagiaireDto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -16,9 +16,13 @@ import java.time.LocalDate;
 public class Stage {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private Long stageId;
+    private String stagiaireId;
     private String title;
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
+    @Transient
+    private StagiaireDto stagiaire;
 }
