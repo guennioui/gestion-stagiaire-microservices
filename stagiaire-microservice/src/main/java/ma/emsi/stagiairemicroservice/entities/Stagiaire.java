@@ -21,6 +21,5 @@ public class Stagiaire {
     private String email;
     private String phoneNumber;
     private String schoolName;
-    @Transient
-    private List<StageDto> stages;
+    private Long stageId;
 }

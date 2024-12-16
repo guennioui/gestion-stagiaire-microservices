@@ -20,4 +20,10 @@ public class GlobalExceptionHandler {
     public @ResponseBody ErrorResponse HandleStagiaireAlreadyExistException(StagiaireAlreadyExistException ex){
         return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
     }
+
+    @ExceptionHandler(value = StagiaireNotFoundException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public @ResponseBody ErrorResponse HandleStagiaireNotFoundException(StagiaireNotFoundException ex){
+        return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+    }
 }

@@ -13,6 +13,7 @@ public interface IStagiaireService {
     Stagiaire findByMatricule(String matricule) throws StagiaireNotFoundException;
     List<StagiaireDto> getAll();
     StagiaireDto stagiaireToStagiaireDTO(Stagiaire stagiaire);
+    void assignStageToStagiaire(String matricule, Long stageId)throws StagiaireNotFoundException;
     Stagiaire stagiaireDTOToStagiaire(StagiaireDto stagiaireDto);
     
 }

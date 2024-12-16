@@ -65,9 +65,9 @@ public class StagiaireController {
         return ResponseEntity.ok(this.stagiaireService.getAll());
     }
 
-    @ExceptionHandler(value = StagiaireNotFoundException.class)
-    @ResponseStatus(HttpStatus.CONFLICT) // is used to control the specific HTTP status code returned for a particular exception. 409
-    public ErrorResponse HandleStagiaireNotFoundException(StagiaireNotFoundException ex){
-        return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+    @PostMapping(path = "/assign-stagiaire/{matricule}/{stageId}")
+    public ResponseEntity<String> assignStageToStagiaire(@PathVariable String matricule, @PathVariable Long stageId) throws StagiaireNotFoundException{
+        this.stagiaireService.assignStageToStagiaire(matricule, stageId);
+        return ResponseEntity.ok("le stagiaire: "+matricule+" a été bien assigné au stage: "+stageId);
     }
 }

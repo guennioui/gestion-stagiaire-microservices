@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class IStageServiceImpl implements IStageService {
     private final StageRepository stageRepository;
     private final StagiaireRestClient stagiaireRestClient;
@@ -76,12 +78,21 @@ public class IStageServiceImpl implements IStageService {
         result.setDescription(stage.getDescription());
         result.setStartDate(stage.getStartDate());
         result.setEndDate(stage.getEndDate());
-        result.setStagiaireId(stage.getStagiaireId());
-        result.setStagiaire(stage.getStagiaire());
+        //result.setStagiaire(stage.getStagiaire());
         this.stageRepository.save(result);
     }
 
     @Override
+    public StageDto findStageById(Long stageId) throws StageNotFoundException {
+        Optional<Stage> optionalStage = this.stageRepository.findByStageId(stageId);
+        if(optionalStage.isEmpty()){
+            throw new StageNotFoundException("stage not found!");
+        }
+        StageDto stageDto = this.stageToStageDto(optionalStage.get());
+        return stageDto;
+    }
+
+    /*@Override
     public StageDto findStageById(Long stageId) throws StageNotFoundException {
         Optional<Stage> optionalStage = this.stageRepository.findByStageId(stageId);
         if(optionalStage.isEmpty()){
@@ -95,7 +106,9 @@ public class IStageServiceImpl implements IStageService {
             }
             Stage stage = optionalStage.get();
             System.out.println("97: "+stage);
-            stage.setStagiaire(stagiaireByMatricule.getBody());
+            if(stagiaireByMatricule.getBody() != null){
+                stage.setStagiaire(List.of(stagiaireByMatricule.getBody()));
+            }
             System.out.println("99: "+stage);
             StageDto stageDto = this.stageToStageDto(optionalStage.get());
             System.out.println("101: "+stageDto);
@@ -104,7 +117,7 @@ public class IStageServiceImpl implements IStageService {
         StageDto result = stageToStageDto(optionalStage.get());
         System.out.println("101: "+result);
         return result;
-    }
+    }*/
 
     @Override
     public StageDto findStageByStagiaireId(Long StagiaireId) throws StageNotFoundException {
@@ -124,10 +137,8 @@ public class IStageServiceImpl implements IStageService {
             if(findById == null){
                 throw new StageNotFoundException("Stage Not Found Exception!");
             }
-
             Stage result = this.stageDtoToStage(findById);
-            result.setStagiaireId(matricule);
-            result.setStagiaire(stagiaireByMatricule.getBody());
+            result.getStagiaireIds().add(matricule);
             this.stageRepository.save(result);
         }else{
             System.out.println("une erreur est survenue lors de l'appel du stagiaireRestClient");

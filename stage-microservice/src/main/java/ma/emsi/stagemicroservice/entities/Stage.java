@@ -18,11 +18,10 @@ public class Stage {
     private Long id;
     @Column(unique = true)
     private Long stageId;
-    private String stagiaireId;
     private String title;
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
-    @Transient
-    private StagiaireDto stagiaire;
+    @ElementCollection
+    private List<String> stagiaireIds = new ArrayList<>();
 }

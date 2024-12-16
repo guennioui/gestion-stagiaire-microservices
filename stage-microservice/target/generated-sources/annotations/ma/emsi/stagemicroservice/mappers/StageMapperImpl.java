@@ -6,7 +6,7 @@ import ma.emsi.stagemicroservice.entities.Stage;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-25T15:41:08+0100",
+    date = "2024-12-03T14:56:09+0100",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
 )
 public class StageMapperImpl implements StageMapper {
@@ -21,12 +21,10 @@ public class StageMapperImpl implements StageMapper {
 
         stage.setId( stageDto.getId() );
         stage.setStageId( stageDto.getStageId() );
-        stage.setStagiaireId( stageDto.getStagiaireId() );
         stage.setTitle( stageDto.getTitle() );
         stage.setDescription( stageDto.getDescription() );
         stage.setStartDate( stageDto.getStartDate() );
         stage.setEndDate( stageDto.getEndDate() );
-        stage.setStagiaire( stageDto.getStagiaire() );
 
         return stage;
     }
@@ -41,12 +39,10 @@ public class StageMapperImpl implements StageMapper {
 
         stageDto.setId( stage.getId() );
         stageDto.setStageId( stage.getStageId() );
-        stageDto.setStagiaireId( stage.getStagiaireId() );
         stageDto.setTitle( stage.getTitle() );
         stageDto.setDescription( stage.getDescription() );
         stageDto.setStartDate( stage.getStartDate() );
         stageDto.setEndDate( stage.getEndDate() );
-        stageDto.setStagiaire( stage.getStagiaire() );
 
         return stageDto;
     }

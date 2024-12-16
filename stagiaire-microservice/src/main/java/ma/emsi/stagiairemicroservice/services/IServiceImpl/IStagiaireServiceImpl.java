@@ -1,5 +1,7 @@
 package ma.emsi.stagiairemicroservice.services.IServiceImpl;
 
+import ma.emsi.stagiairemicroservice.clients.StageRestClient;
+import ma.emsi.stagiairemicroservice.dtos.StageDto;
 import ma.emsi.stagiairemicroservice.dtos.StagiaireDto;
 import ma.emsi.stagiairemicroservice.entities.Stagiaire;
 import ma.emsi.stagiairemicroservice.exceptions.StagiaireNotFoundException;
@@ -7,19 +9,24 @@ import ma.emsi.stagiairemicroservice.mappers.StagiaireMapper;
 import ma.emsi.stagiairemicroservice.repositories.StagiaireRepository;
 import ma.emsi.stagiairemicroservice.services.IService.IStagiaireService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class IStagiaireServiceImpl implements IStagiaireService {
     private final StagiaireRepository stagiaireRepository;
-
+    private final StageRestClient stageRestClient;
     @Autowired
-    public IStagiaireServiceImpl(StagiaireRepository stagiaireRepository) {
+    public IStagiaireServiceImpl(StagiaireRepository stagiaireRepository, StageRestClient stageRestClient) {
         this.stagiaireRepository = stagiaireRepository;
+        this.stageRestClient = stageRestClient;
     }
 
     @Override
@@ -72,6 +79,24 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     @Override
     public StagiaireDto stagiaireToStagiaireDTO(Stagiaire stagiaire) {
         return StagiaireMapper.INSTANCE.stagiaireToStagiaireDTO(stagiaire);
+    }
+
+    @Override
+    public void assignStageToStagiaire(String matricule, Long stageId) throws StagiaireNotFoundException {
+        Stagiaire byMatricule = this.findByMatricule(matricule);
+        if(byMatricule != null){
+            ResponseEntity<StageDto> stageById = stageRestClient.findStageById(stageId);
+            System.out.println("87: "+stageById.getBody());
+            if(stageById.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+                byMatricule.setStageId(stageById.getBody().getStageId());
+                this.stagiaireRepository.save(byMatricule);
+            }
+            else {
+                throw new RuntimeException("une erreur est survenue lors de l'affectation du stagiaire: " + matricule + " au stage: " + stageId);
+            }
+        }else{
+            throw new StagiaireNotFoundException("le stagiaire que vous rechercher est introuvable!");
+        }
     }
 
     @Override

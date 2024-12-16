@@ -40,6 +40,7 @@ public class StageController {
         this.stageService.deleteStage(stageId);
         return new ResponseEntity<>(HttpStatus.valueOf(200));
     }
+
     @GetMapping(path = "/{stageId}")
     public ResponseEntity<?> findStageById(@PathVariable long stageId)
         throws StageNotFoundException{
