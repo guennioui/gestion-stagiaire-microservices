@@ -92,59 +92,6 @@ public class IStageServiceImpl implements IStageService {
         return stageDto;
     }
 
-    /*@Override
-    public StageDto findStageById(Long stageId) throws StageNotFoundException {
-        Optional<Stage> optionalStage = this.stageRepository.findByStageId(stageId);
-        if(optionalStage.isEmpty()){
-            throw new StageNotFoundException("stage not found!");
-        }
-        //System.out.println("91: "+optionalStage.get());
-        if(optionalStage.get().getStagiaireId() != null){
-            ResponseEntity<StagiaireDto> stagiaireByMatricule = this.stagiaireRestClient.findStagiaireByMatricule(optionalStage.get().getStagiaireId());
-            if(stagiaireByMatricule == null){
-                throw new RuntimeException("une erreur est survenue lors de l'appel du stagiaireRestClient");
-            }
-            Stage stage = optionalStage.get();
-            System.out.println("97: "+stage);
-            if(stagiaireByMatricule.getBody() != null){
-                stage.setStagiaire(List.of(stagiaireByMatricule.getBody()));
-            }
-            System.out.println("99: "+stage);
-            StageDto stageDto = this.stageToStageDto(optionalStage.get());
-            System.out.println("101: "+stageDto);
-            return stageDto;
-        }
-        StageDto result = stageToStageDto(optionalStage.get());
-        System.out.println("101: "+result);
-        return result;
-    }*/
-
-    @Override
-    public StageDto findStageByStagiaireId(Long StagiaireId) throws StageNotFoundException {
-        return null;
-    }
-
-    @Override
-    public void assignStagiaireToStage(String matricule, Long stageId) throws StageNotFoundException {
-        ResponseEntity<StagiaireDto> stagiaireByMatricule = this.stagiaireRestClient.findStagiaireByMatricule(matricule);
-        if(stagiaireByMatricule.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
-            StageDto findById = null;
-            try {
-                findById = this.findStageById(stageId);
-            }catch (StageNotFoundException ex){
-                System.out.println(ex.getMessage());
-            }
-            if(findById == null){
-                throw new StageNotFoundException("Stage Not Found Exception!");
-            }
-            Stage result = this.stageDtoToStage(findById);
-            result.getStagiaireIds().add(matricule);
-            this.stageRepository.save(result);
-        }else{
-            System.out.println("une erreur est survenue lors de l'appel du stagiaireRestClient");
-        }
-    }
-
     @Override
     public List<StageDto> getAll() {
         List<StageDto> stageDtos = new ArrayList<>();

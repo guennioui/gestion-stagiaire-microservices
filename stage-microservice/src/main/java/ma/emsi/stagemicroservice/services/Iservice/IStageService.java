@@ -12,8 +12,6 @@ public interface IStageService {
     void deleteStage(Long stageId) throws StageNotFoundException;
     void updateStage(Long stageId, StageDto stage) throws StageNotFoundException;
     StageDto findStageById(Long stageId) throws StageNotFoundException;
-    StageDto findStageByStagiaireId(Long stagiaireId) throws StageNotFoundException;
-    void assignStagiaireToStage(String matricule, Long stageId) throws StageNotFoundException;
     List<StageDto> getAll();
     StageDto stageToStageDto(Stage stage);
     Stage stageDtoToStage(StageDto stageDto);

@@ -59,10 +59,19 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     @Override
     public Stagiaire findByMatricule(String matricule) throws StagiaireNotFoundException {
         Optional<Stagiaire> optionalStagiaire = this.stagiaireRepository.findByMatricule(matricule);
+        Stagiaire stagiaire = null;
         if(optionalStagiaire.isEmpty()){
             throw new StagiaireNotFoundException("le stagiaire que vous rechercher est introuvable!");
         }
-        return optionalStagiaire.get();
+        stagiaire = optionalStagiaire.get();
+        if(stagiaire.getStageId() != null){
+            ResponseEntity<StageDto> stageById = stageRestClient.findStageById(stagiaire.getStageId());
+            if(stageById.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))) {
+                StageDto stageDto = stageById.getBody();
+                stagiaire.setStageDto(stageDto);
+            }
+        }
+        return stagiaire;
     }
 
     @Override
@@ -77,18 +86,12 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     }
 
     @Override
-    public StagiaireDto stagiaireToStagiaireDTO(Stagiaire stagiaire) {
-        return StagiaireMapper.INSTANCE.stagiaireToStagiaireDTO(stagiaire);
-    }
-
-    @Override
     public void assignStageToStagiaire(String matricule, Long stageId) throws StagiaireNotFoundException {
         Stagiaire byMatricule = this.findByMatricule(matricule);
         if(byMatricule != null){
             ResponseEntity<StageDto> stageById = stageRestClient.findStageById(stageId);
-            System.out.println("87: "+stageById.getBody());
             if(stageById.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
-                byMatricule.setStageId(stageById.getBody().getStageId());
+                byMatricule.setStageId(stageId);
                 this.stagiaireRepository.save(byMatricule);
             }
             else {
@@ -97,6 +100,11 @@ public class IStagiaireServiceImpl implements IStagiaireService {
         }else{
             throw new StagiaireNotFoundException("le stagiaire que vous rechercher est introuvable!");
         }
+    }
+
+    @Override
+    public StagiaireDto stagiaireToStagiaireDTO(Stagiaire stagiaire) {
+        return StagiaireMapper.INSTANCE.stagiaireToStagiaireDTO(stagiaire);
     }
 
     @Override

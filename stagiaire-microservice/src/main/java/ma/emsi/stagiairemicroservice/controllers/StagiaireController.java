@@ -56,6 +56,7 @@ public class StagiaireController {
     @GetMapping(path = "/{matricule}")
     public ResponseEntity<StagiaireDto> findStagiaireByMatricule(@PathVariable String matricule) throws StagiaireNotFoundException {
         Stagiaire findByMatricule = this.stagiaireService.findByMatricule(matricule);
+        System.out.println("59:"+ findByMatricule);
         StagiaireDto result = this.stagiaireService.stagiaireToStagiaireDTO(findByMatricule);
         return ResponseEntity.ok(result);
     }

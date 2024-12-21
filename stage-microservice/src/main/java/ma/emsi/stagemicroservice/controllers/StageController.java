@@ -54,9 +54,4 @@ public class StageController {
         return ResponseEntity.ok(all);
     }
 
-    @PostMapping(path = "/assign-stagiaire/{matricule}/{stageId}")
-    public ResponseEntity<String> assignStagiaireToStage(@PathVariable String matricule, @PathVariable Long stageId) throws StageNotFoundException{
-        this.stageService.assignStagiaireToStage(matricule, stageId);
-        return ResponseEntity.ok("le stagiaire: "+matricule+" a été bien assigné au stage: "+stageId);
-    }
 }

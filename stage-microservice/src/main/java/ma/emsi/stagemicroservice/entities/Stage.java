@@ -12,7 +12,8 @@ import java.util.List;
 
 @Data
 @Entity
-@AllArgsConstructor@NoArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Stage {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +23,4 @@ public class Stage {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
-    @ElementCollection
-    private List<String> stagiaireIds = new ArrayList<>();
 }

@@ -12,8 +12,8 @@ public interface IStagiaireService {
     void updateStagiaire(String matricule, StagiaireDto stagiaireDto) throws StagiaireNotFoundException;
     Stagiaire findByMatricule(String matricule) throws StagiaireNotFoundException;
     List<StagiaireDto> getAll();
-    StagiaireDto stagiaireToStagiaireDTO(Stagiaire stagiaire);
     void assignStageToStagiaire(String matricule, Long stageId)throws StagiaireNotFoundException;
+    StagiaireDto stagiaireToStagiaireDTO(Stagiaire stagiaire);
     Stagiaire stagiaireDTOToStagiaire(StagiaireDto stagiaireDto);
     
 }
