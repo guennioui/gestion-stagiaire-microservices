@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Bootstrap User Management Data Table</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="layout-container">
+  <app-side-bar class="sidebar"></app-side-bar>
+  <section class="home-section">
+    <div class="container-xl">
+      <div class="table-responsive">
+        <div class="table-wrapper">
+          <div class="table-title">
+            <div class="row">
+              <div class="col-sm-5">
+                <h2>Stages <b>Details</b></h2>
+              </div>
+              <div class="col-sm-7">
+                <a data-toggle="modal" data-target="#addStageModal" class="btn btn-secondary">
+                  <i class="material-icons">&#xE147;</i> <span>Ajouter nouveau stage</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+              <th>Id</th>
+              <th>Titre</th>
+              <th>Description</th>
+              <th>Start Date</th>
+              <th>Dead Line</th>
+              <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr >
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td style="padding: 0; width: 13%;">
+                <a class="view" data-toggle="modal" data-target="#viewStageModal" title="View">
+                  <i class="material-icons">&#xE417;</i>
+                </a>
+                <a class="settings" data-toggle="modal" data-target="#updateStageModal" title="update">
+                  <i class="material-icons">&#xE8B8;</i>
+                </a>
+                <a data-toggle="modal" data-target="#DeleteModel" class="delete" title="Delete">
+                  <i class="material-icons">&#xE5C9;</i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="clearfix">
+            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+            <ul class="pagination">
+              <li class="page-item disabled"><a href="#">Previous</a></li>
+              <li class="page-item"><a href="#" class="page-link">1</a></li>
+              <li class="page-item"><a href="#" class="page-link">2</a></li>
+              <li class="page-item active"><a href="#" class="page-link">3</a></li>
+              <li class="page-item"><a href="#" class="page-link">4</a></li>
+              <li class="page-item"><a href="#" class="page-link">5</a></li>
+              <li class="page-item"><a href="#" class="page-link">Next</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Job Offer Modal -->
+    <div id="addStageModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form #addForm="ngForm" >
+            <div class="modal-header">
+              <h4 class="modal-title">Add New Job Offer</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Job Title</label>
+                  <input type="text" ngModel name="jobTitle" id="jobTitle" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Job Description</label>
+                  <textarea ngModel name="jobDescription" id="jobDescription" class="form-control" required></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Job Type</label>
+                  <select ngModel name="jobType" id="jobType" class="form-control" required>
+                    <option value="" disabled selected>Select Job Type</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Temporary">Temporary</option>
+                    <option value="Internship">Internship</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Requirements</label>
+                  <input type="text" ngModel name="requirements" id="requirements" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Salary</label>
+                  <input type="text" ngModel name="salary" id="salary" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Posted Date</label>
+                  <input type="date" ngModel name="postedDate" id="postedDate" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Dead Line</label>
+                  <input type="date" ngModel name="deadLine" id="deadLine" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>isActive</label>
+                  <div class="form-check">
+                    <input type="radio" ngModel name="isActive" id="isActiveTrue" class="form-check-input" value="true" required>
+                    <label for="isActiveTrue" class="form-check-label">True</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" ngModel name="isActive" id="isActiveFalse" class="form-check-input" value="false" required>
+                    <label for="isActiveFalse" class="form-check-label">False</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+              <input type="submit" [disabled]="addForm.invalid" class="btn btn-success" value="Add">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Update Job Offer Modal -->
+    <div id="updateStageModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form #editForm="ngForm">
+            <input type="hidden"  name="jobOfferId" class="form-control" id="id" placeholder="id">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Job Offer</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Job Title</label>
+                  <input type="text" name="jobTitle" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Job Description</label>
+                  <textarea name="jobDescription" class="form-control" required></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Job Type</label>
+                  <select name="jobType" class="form-control" required>
+                    <option value="" disabled selected>Select Job Type</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Temporary">Temporary</option>
+                    <option value="Internship">Internship</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Requirements</label>
+                  <input type="text" name="requirements" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Salary</label>
+                  <input type="text" name="salary" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Posted Date</label>
+                  <input type="date" name="postedDate" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Dead Line</label>
+                  <input type="date" name="deadLine" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>isActive</label>
+                  <div class="form-check">
+                    <input type="radio" name="isActive" class="form-check-input" value="true" required>
+                    <label for="isActiveTrue" class="form-check-label">True</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" name="isActive" class="form-check-input" value="false" required>
+                    <label for="isActiveFalse" class="form-check-label">False</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+              <input type="submit" class="btn btn-success" value="Update">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="DeleteModel" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form>
+            <div class="modal-header">
+              <h4 class="modal-title">Confirm Deletion</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete this supervisor?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Delete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Job Offer Modal -->
+    <div class="modal fade" id="viewStageModal" tabindex="-1" role="dialog" aria-labelledby="viewStageModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="viewStageModalLabel">Job Offer Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Display job offer details here -->
+            <p><strong>ID:</strong> aaaa</p>
+            <p><strong>Start Date:</strong> bbbb</p>
+            <p><strong>End Date:</strong> cccc</p>
+            <p><strong>Subject:</strong> dddd</p>
+            <p><strong>Description:</strong> eeee</p>
+            <p><strong>Supervisor Name:</strong> ffff</p>
+            <p><strong>Supervisor Phone:</strong> gggg</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

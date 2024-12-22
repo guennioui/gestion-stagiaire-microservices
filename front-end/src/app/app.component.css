@@ -1,0 +1,36 @@
+.layout-container {
+  display: flex;
+  height: 100vh;
+}
+
+.app-sidebar {
+  flex: 0 0 auto;
+  /* Ajoutez d'autres styles de la barre latérale ici */
+}
+
+.content {
+  flex: 1 1 auto;
+  overflow: auto;
+  /* Ajoutez d'autres styles du contenu ici */
+}
+
+.sidebar .nav-links li.has-submenu .sub-menu {
+  display: none;
+}
+
+.sidebar .nav-links li.has-submenu.showMenu .sub-menu {
+  display: block;
+}
+/* Style pour l'élément actif */
+.nav-links li.active {
+  background-color: #2e2d42;
+  font-weight: bold;
+}
+
+/* Style pour les éléments de sous-menu */
+.sub-menu {
+  display: none;
+}
+.sub-menu.active {
+  display: block;
+}
