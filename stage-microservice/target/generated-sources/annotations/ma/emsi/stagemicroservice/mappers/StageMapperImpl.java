@@ -6,7 +6,7 @@ import ma.emsi.stagemicroservice.entities.Stage;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-21T21:39:21+0100",
+    date = "2024-12-23T22:16:45+0100",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.10 (Oracle Corporation)"
 )
 public class StageMapperImpl implements StageMapper {

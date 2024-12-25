@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/stagiaire")
+@CrossOrigin("*")
 public class StagiaireController {
     private final IStagiaireService stagiaireService;
 
@@ -61,9 +62,14 @@ public class StagiaireController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(path = "/get-all")
+    @GetMapping(path = "/all")
     public ResponseEntity<List<StagiaireDto>> findAllStagiaire(){
         return ResponseEntity.ok(this.stagiaireService.getAll());
+    }
+
+    @GetMapping(path = "/find-by-stageId/{stageId}")
+    public ResponseEntity<List<StagiaireDto>> getStagiairesByStageId(@PathVariable Long stageId){
+        return ResponseEntity.ok(this.stagiaireService.getStagiairesByStageId(stageId));
     }
 
     @PostMapping(path = "/assign-stagiaire/{matricule}/{stageId}")

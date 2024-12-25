@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/stage")
+@CrossOrigin("*")
 public class StageController {
     private final IStageService stageService;
     @Autowired

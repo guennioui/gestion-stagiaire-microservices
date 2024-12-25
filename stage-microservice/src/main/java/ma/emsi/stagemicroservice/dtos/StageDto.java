@@ -14,5 +14,4 @@ public class StageDto {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
-    private List<StagiaireDto> stagiaire;
 }

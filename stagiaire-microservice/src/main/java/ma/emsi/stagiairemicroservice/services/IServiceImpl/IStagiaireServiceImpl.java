@@ -77,10 +77,20 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     @Override
     public List<StagiaireDto> getAll() {
         List<StagiaireDto> stagiaireDtos = new ArrayList<>();
+        List<StageDto> stageDtos = new ArrayList<>();
+        ResponseEntity<List<StageDto>> stages = stageRestClient.getAll();
+        if(stages.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+            stageDtos.addAll(stages.getBody());
+        }
         for(Stagiaire stagiaire : this.stagiaireRepository.findAll()){
-            stagiaireDtos.add(
-                    this.stagiaireToStagiaireDTO(stagiaire)
-            );
+            if(stagiaire.getStageId() != null){
+                for(StageDto stageDto : stageDtos){
+                    if(stageDto.getStageId() == stagiaire.getStageId()){
+                        stagiaire.setStageDto(stageDto);
+                    }
+                }
+            }
+            stagiaireDtos.add(this.stagiaireToStagiaireDTO(stagiaire));
         }
         return stagiaireDtos;
     }
@@ -100,6 +110,17 @@ public class IStagiaireServiceImpl implements IStagiaireService {
         }else{
             throw new StagiaireNotFoundException("le stagiaire que vous rechercher est introuvable!");
         }
+    }
+
+    @Override
+    public List<StagiaireDto> getStagiairesByStageId(Long stageId) {
+        List<StagiaireDto> stagiaireDtos = new ArrayList<>();
+        for(Stagiaire stagiaire : this.stagiaireRepository.findAllByStageId(stageId)){
+            stagiaireDtos.add(
+                    this.stagiaireToStagiaireDTO(stagiaire)
+            );
+        }
+        return stagiaireDtos;
     }
 
     @Override
