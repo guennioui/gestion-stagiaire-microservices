@@ -26,7 +26,7 @@
               </div>
               <div class="col-sm-7">
                 <a data-toggle="modal" data-target="#addStageModal" class="btn btn-secondary">
-                  <i class="material-icons">&#xE147;</i> <span>Ajouter nouveau stage</span>
+                  <i class="material-icons">&#xE147;</i> <span>Ajouter un nouveau stage</span>
                 </a>
               </div>
             </div>
@@ -38,27 +38,25 @@
               <th>Titre</th>
               <th>Description</th>
               <th>Start Date</th>
-              <th>Dead Line</th>
+              <th>End Date</th>
               <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            <tr >
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+            <tr *ngFor="let stage of stages">
+              <td>{{ stage.stageId }}</td>
+              <td>{{ stage.title }}</td>
+              <td>{{ stage.description }}</td>
+              <td>{{ stage.startDate }}</td>
+              <td>{{ stage.endDate }}</td>
               <td style="padding: 0; width: 13%;">
                 <a class="view" data-toggle="modal" data-target="#viewStageModal" title="View">
                   <i class="material-icons">&#xE417;</i>
                 </a>
-                <a class="settings" data-toggle="modal" data-target="#updateStageModal" title="update">
+                <a class="settings" data-toggle="modal" data-target="#updateStageModal" title="update" (click)="onUpdate(stage)">
                   <i class="material-icons">&#xE8B8;</i>
                 </a>
-                <a data-toggle="modal" data-target="#DeleteModel" class="delete" title="Delete">
+                <a data-toggle="modal" data-target="#DeleteModel" class="delete" title="Delete" (click)="setDeleteId(stage.stageId)">
                   <i class="material-icons">&#xE5C9;</i>
                 </a>
               </td>
@@ -85,63 +83,34 @@
     <div id="addStageModal" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content">
-          <form #addForm="ngForm" >
+          <form #addForm="ngForm" (ngSubmit)="addStage(addForm)">
             <div class="modal-header">
-              <h4 class="modal-title">Add New Job Offer</h4>
+              <h4 class="modal-title">Add New Stage</h4>
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label>Job Title</label>
-                  <input type="text" ngModel name="jobTitle" id="jobTitle" class="form-control" required>
+                  <label>Reference</label>
+                  <input type="text" ngModel name="stageId" id="stageId" class="form-control" required/>
                 </div>
                 <div class="form-group col-md-6">
-                  <label>Job Description</label>
-                  <textarea ngModel name="jobDescription" id="jobDescription" class="form-control" required></textarea>
+                  <label>Titre</label>
+                  <input type="text" ngModel name="title" id="titre" class="form-control" required/>
                 </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label>Job Type</label>
-                  <select ngModel name="jobType" id="jobType" class="form-control" required>
-                    <option value="" disabled selected>Select Job Type</option>
-                    <option value="Full-time">Full-time</option>
-                    <option value="Part-time">Part-time</option>
-                    <option value="Temporary">Temporary</option>
-                    <option value="Internship">Internship</option>
-                  </select>
-                </div>
-                <div class="form-group col-md-6">
-                  <label>Requirements</label>
-                  <input type="text" ngModel name="requirements" id="requirements" class="form-control" required>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label>Salary</label>
-                  <input type="text" ngModel name="salary" id="salary" class="form-control" required>
-                </div>
-                <div class="form-group col-md-6">
-                  <label>Posted Date</label>
-                  <input type="date" ngModel name="postedDate" id="postedDate" class="form-control" required>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label>Dead Line</label>
-                  <input type="date" ngModel name="deadLine" id="deadLine" class="form-control" required>
-                </div>
-                <div class="form-group col-md-6">
-                  <label>isActive</label>
-                  <div class="form-check">
-                    <input type="radio" ngModel name="isActive" id="isActiveTrue" class="form-check-input" value="true" required>
-                    <label for="isActiveTrue" class="form-check-label">True</label>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>start Date</label>
+                    <input type="date" ngModel name="startDate" id="startDate" class="form-control" required/>
                   </div>
-                  <div class="form-check">
-                    <input type="radio" ngModel name="isActive" id="isActiveFalse" class="form-check-input" value="false" required>
-                    <label for="isActiveFalse" class="form-check-label">False</label>
+                  <div class="form-group col-md-6">
+                    <label>end Date</label>
+                    <input type="date" ngModel name="endDate" id="endDate" class="form-control" required/>
                   </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Description</label>
+                  <textarea ngModel name="description" id="description" class="form-control" required></textarea>
                 </div>
               </div>
             </div>
@@ -159,69 +128,42 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <form #editForm="ngForm">
-            <input type="hidden"  name="jobOfferId" class="form-control" id="id" placeholder="id">
+            <input type="hidden" ngModel="{{updateStage?.stageId}}" name="stageId" class="form-control" id="id" placeholder="id">
             <div class="modal-header">
-              <h4 class="modal-title">Edit Job Offer</h4>
+              <h4 class="modal-title">Update Stage</h4>
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label>Job Title</label>
-                  <input type="text" name="jobTitle" class="form-control" required>
+                  <label>Reference</label>
+                  <input type="text" ngModel="{{updateStage?.stageId}}" name="stageId" class="form-control" required/>
                 </div>
                 <div class="form-group col-md-6">
-                  <label>Job Description</label>
-                  <textarea name="jobDescription" class="form-control" required></textarea>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label>Job Type</label>
-                  <select name="jobType" class="form-control" required>
-                    <option value="" disabled selected>Select Job Type</option>
-                    <option value="Full-time">Full-time</option>
-                    <option value="Part-time">Part-time</option>
-                    <option value="Temporary">Temporary</option>
-                    <option value="Internship">Internship</option>
-                  </select>
-                </div>
-                <div class="form-group col-md-6">
-                  <label>Requirements</label>
-                  <input type="text" name="requirements" class="form-control" required>
+                  <label>Titre</label>
+                  <input type="text" ngModel="{{updateStage?.title}}" name="title" class="form-control" required/>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label>Salary</label>
-                  <input type="text" name="salary" class="form-control" required>
+                  <label>start Date</label>
+                  <input type="date" ngModel="{{updateStage?.startDate}}" name="startDate" class="form-control" required/>
                 </div>
                 <div class="form-group col-md-6">
-                  <label>Posted Date</label>
-                  <input type="date" name="postedDate" class="form-control" required>
+                  <label>end Date</label>
+                  <input type="date" ngModel="{{updateStage?.endDate}}" name="endDate" class="form-control" required>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label>Dead Line</label>
-                  <input type="date" name="deadLine" class="form-control" required>
-                </div>
-                <div class="form-group col-md-6">
-                  <label>isActive</label>
-                  <div class="form-check">
-                    <input type="radio" name="isActive" class="form-check-input" value="true" required>
-                    <label for="isActiveTrue" class="form-check-label">True</label>
-                  </div>
-                  <div class="form-check">
-                    <input type="radio" name="isActive" class="form-check-input" value="false" required>
-                    <label for="isActiveFalse" class="form-check-label">False</label>
-                  </div>
+                    <label>Description</label>
+                    <textarea ngModel="{{updateStage?.description}}" name="description" class="form-control" required></textarea>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-              <input type="submit" class="btn btn-success" value="Update">
+              <input type="submit" (click)="onUpdateStage(editForm.value)" class="btn btn-success" value="Update">
             </div>
           </form>
         </div>
@@ -238,11 +180,11 @@
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
-              Are you sure you want to delete this supervisor?
+              Are you sure you want to delete this internship?
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Delete</button>
+              <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true" (click)="onDeleteStage()">Delete</button>
             </div>
           </form>
         </div>

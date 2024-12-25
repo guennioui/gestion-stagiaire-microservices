@@ -7,5 +7,5 @@ export interface Stagiaire{
   email: string;
   phoneNumber: string;
   schoolName: string;
-  stage?: Stage;
+  stageDto?: Stage;
 }

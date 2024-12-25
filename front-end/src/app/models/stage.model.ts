@@ -1,8 +1,7 @@
-export interface Stage{
-  id?: number;
+export interface Stage {
   stageId: number;
   title: string;
-  description?: string;
+  description: string;
   startDate: Date;
   endDate: Date;
 }
