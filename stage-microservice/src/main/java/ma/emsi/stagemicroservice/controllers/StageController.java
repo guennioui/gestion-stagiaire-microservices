@@ -14,12 +14,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/stage")
+@CrossOrigin("*")
 public class StageController {
     private final IStageService stageService;
     @Autowired
     public StageController(IStageService iStageService) {
         this.stageService = iStageService;
     }
+
     @PostMapping(path = "/add-stage")
     public ResponseEntity<?> addStage(@RequestBody StageDto stageDto) throws StageAlreadyExistingException, StageNotFoundException {
         this.stageService.addStage(stageDto);
@@ -37,14 +39,14 @@ public class StageController {
     public ResponseEntity<Void> deleteStage(@PathVariable long stageId)
         throws StageNotFoundException{
         this.stageService.deleteStage(stageId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.valueOf(200));
     }
+
     @GetMapping(path = "/{stageId}")
-    public ResponseEntity<StageDto> findStageById(@PathVariable long stageId)
+    public ResponseEntity<?> findStageById(@PathVariable long stageId)
         throws StageNotFoundException{
-        Stage stage = this.stageService.findStageById(stageId);
-        StageDto result = this.stageService.stageToStageDto(stage);
-        return ResponseEntity.ok(result);
+        StageDto stageById = this.stageService.findStageById(stageId);
+        return ResponseEntity.ok(stageById);
     }
 
     @GetMapping(path = "/all")

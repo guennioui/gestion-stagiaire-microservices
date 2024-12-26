@@ -1,0 +1,23 @@
+.navbar navbar-expand navbar-dark bg-dark {
+  background-color: #313159;
+}
+/* Style du composant d'en-tête */
+.header {
+  display: flex;
+  align-items: center; /* Aligner les éléments verticalement */
+  padding: 10px 20px; /* Espacement intérieur */
+  color: black; /* Couleur du texte */
+}
+
+/* Style du logo */
+.logo {
+  max-width: 100px; /* Largeur maximale du logo */
+  max-height: 60px; /* Hauteur maximale du logo */
+}
+
+/* Style du texte "La Direction des Systèmes d'Information" */
+.title {
+  font-size: 24px; /* Taille de la police du texte */
+  font-weight: bold; /* Poids de la police du texte */
+  margin-left: 20px; /* Marge à gauche pour séparer le logo du texte */
+}

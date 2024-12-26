@@ -13,4 +13,5 @@ public class StagiaireDto {
     private String email;
     private String phoneNumber;
     private String schoolName;
+    private StageDto stageDto;
 }

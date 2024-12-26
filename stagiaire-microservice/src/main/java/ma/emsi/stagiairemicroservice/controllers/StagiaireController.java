@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/stagiaire")
+@CrossOrigin("*")
 public class StagiaireController {
     private final IStagiaireService stagiaireService;
 
@@ -56,18 +57,24 @@ public class StagiaireController {
     @GetMapping(path = "/{matricule}")
     public ResponseEntity<StagiaireDto> findStagiaireByMatricule(@PathVariable String matricule) throws StagiaireNotFoundException {
         Stagiaire findByMatricule = this.stagiaireService.findByMatricule(matricule);
+        System.out.println("59:"+ findByMatricule);
         StagiaireDto result = this.stagiaireService.stagiaireToStagiaireDTO(findByMatricule);
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(path = "/get-all")
+    @GetMapping(path = "/all")
     public ResponseEntity<List<StagiaireDto>> findAllStagiaire(){
         return ResponseEntity.ok(this.stagiaireService.getAll());
     }
 
-    @ExceptionHandler(value = StagiaireNotFoundException.class)
-    @ResponseStatus(HttpStatus.CONFLICT) // is used to control the specific HTTP status code returned for a particular exception. 409
-    public ErrorResponse HandleStagiaireNotFoundException(StagiaireNotFoundException ex){
-        return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+    @GetMapping(path = "/find-by-stageId/{stageId}")
+    public ResponseEntity<List<StagiaireDto>> getStagiairesByStageId(@PathVariable Long stageId){
+        return ResponseEntity.ok(this.stagiaireService.getStagiairesByStageId(stageId));
+    }
+
+    @PostMapping(path = "/assign-stagiaire/{matricule}/{stageId}")
+    public ResponseEntity<String> assignStageToStagiaire(@PathVariable String matricule, @PathVariable Long stageId) throws StagiaireNotFoundException{
+        this.stagiaireService.assignStageToStagiaire(matricule, stageId);
+        return ResponseEntity.ok("le stagiaire: "+matricule+" a été bien assigné au stage: "+stageId);
     }
 }
