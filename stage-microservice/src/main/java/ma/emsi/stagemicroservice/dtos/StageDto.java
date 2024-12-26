@@ -14,4 +14,6 @@ public class StageDto {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String codeDepartement;
+    private DepartementDto departementDto;
 }

@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class EncadrantExceptionHandler {
     @ExceptionHandler(value = EncadrantNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public @ResponseBody ErrorResponse handlingStageNotFoundException(EncadrantNotFoundException ex){
+    public @ResponseBody ErrorResponse handlingEncadrantNotFoundException(EncadrantNotFoundException ex){
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
     @ExceptionHandler(value = EncadrantAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public @ResponseBody ErrorResponse handlingStageAlreadyExistingException(EncadrantAlreadyExistException ex){
+    public @ResponseBody ErrorResponse handlingEncadrantAlreadyExistingException(EncadrantAlreadyExistException ex){
         return new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
     }
 }

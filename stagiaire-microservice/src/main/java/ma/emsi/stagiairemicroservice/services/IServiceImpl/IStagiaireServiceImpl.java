@@ -75,7 +75,7 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     }
 
     @Override
-    public List<StagiaireDto> getAll() {
+    public List<StagiaireDto> getAll() {//method template
         List<StagiaireDto> stagiaireDtos = new ArrayList<>();
         List<StageDto> stageDtos = new ArrayList<>();
         ResponseEntity<List<StageDto>> stages = stageRestClient.getAll();

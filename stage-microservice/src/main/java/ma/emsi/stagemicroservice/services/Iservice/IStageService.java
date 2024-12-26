@@ -15,4 +15,5 @@ public interface IStageService {
     List<StageDto> getAll();
     StageDto stageToStageDto(Stage stage);
     Stage stageDtoToStage(StageDto stageDto);
+    void assignDepartementToStage(Long stageId, String codeDepartement) throws StageNotFoundException;
 }

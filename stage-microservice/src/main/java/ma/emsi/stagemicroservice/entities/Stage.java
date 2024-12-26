@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ma.emsi.stagemicroservice.dtos.DepartementDto;
 import ma.emsi.stagemicroservice.dtos.StagiaireDto;
 
 import java.time.LocalDate;
@@ -23,4 +24,7 @@ public class Stage {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String codeDepartement;
+    @Transient
+    private DepartementDto departementDto;
 }

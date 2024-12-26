@@ -55,4 +55,11 @@ public class StageController {
         return ResponseEntity.ok(all);
     }
 
+    @PostMapping(path = "/assign-departement-To-stage/{stageId}/{codeDepartement}")
+    public ResponseEntity<?> assignDepartementToStage(@PathVariable  Long stageId, @PathVariable String codeDepartement)
+            throws StageNotFoundException{
+        this.stageService.assignDepartementToStage(stageId, codeDepartement);
+        return new ResponseEntity<>(HttpStatus.valueOf(200));
+    }
+
 }
