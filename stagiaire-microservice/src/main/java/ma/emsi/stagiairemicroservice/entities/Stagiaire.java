@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import ma.emsi.stagiairemicroservice.dtos.StageDto;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Entity
 @Setter @Getter @ToString
 @NoArgsConstructor @AllArgsConstructor
