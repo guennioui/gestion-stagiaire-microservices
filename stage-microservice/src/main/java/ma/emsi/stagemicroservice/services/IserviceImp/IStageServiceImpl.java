@@ -1,8 +1,10 @@
 package ma.emsi.stagemicroservice.services.IserviceImp;
 
 import ma.emsi.stagemicroservice.clients.DepartementRestClient;
+import ma.emsi.stagemicroservice.clients.EncadrantRestClient;
 import ma.emsi.stagemicroservice.clients.StagiaireRestClient;
 import ma.emsi.stagemicroservice.dtos.DepartementDto;
+import ma.emsi.stagemicroservice.dtos.EncadrantDto;
 import ma.emsi.stagemicroservice.dtos.StageDto;
 import ma.emsi.stagemicroservice.dtos.StagiaireDto;
 import ma.emsi.stagemicroservice.exceptions.StageAlreadyExistingException;
@@ -27,12 +29,14 @@ public class IStageServiceImpl implements IStageService {
     private final StageRepository stageRepository;
     private final StagiaireRestClient stagiaireRestClient;
     private final DepartementRestClient departementRestClient;
+    private final EncadrantRestClient encadrantRestClient;
 
     @Autowired
-    public IStageServiceImpl(StageRepository stageRepository, StagiaireRestClient stagiaireRestClient, DepartementRestClient departementRestClient) {
+    public IStageServiceImpl(StageRepository stageRepository, StagiaireRestClient stagiaireRestClient, DepartementRestClient departementRestClient, EncadrantRestClient encadrantRestClient) {
         this.stageRepository = stageRepository;
         this.stagiaireRestClient = stagiaireRestClient;
         this.departementRestClient = departementRestClient;
+        this.encadrantRestClient = encadrantRestClient;
     }
 
     @Override
@@ -142,8 +146,6 @@ public class IStageServiceImpl implements IStageService {
         StageDto stageById = this.findStageById(stageId);
         if(stageById != null){
             ResponseEntity<DepartementDto> departementByCode = departementRestClient.findDepartementByCode(codeDepartement);
-            System.out.println("143: "+departementByCode.getStatusCode());
-            System.out.println("143: "+departementByCode.getBody());
             if(departementByCode.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
                 Stage stage = this.stageDtoToStage(stageById);
                 stage.setCodeDepartement(codeDepartement);
@@ -155,5 +157,14 @@ public class IStageServiceImpl implements IStageService {
         }else{
             throw new StageNotFoundException("stage not found exception");
         }
+    }
+
+    @Override
+    public void assignEncadrantToStage(Long stageId, String matriculeEncadrant) throws StageNotFoundException {
+        StageDto stageById = this.findStageById(stageId);
+        if(stageById != null){
+            ResponseEntity<EncadrantDto> encadrantByMatricule = encadrantRestClient.findEncadrantByMatricule(matriculeEncadrant);
+        }
+
     }
 }

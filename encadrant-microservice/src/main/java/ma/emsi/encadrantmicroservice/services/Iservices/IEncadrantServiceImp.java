@@ -40,13 +40,13 @@ public class IEncadrantServiceImp implements IEncadrantService {
     }
 
     @Override
-    public void deleteEncadrant(Long matricule) throws EncadrantNotFoundException {
+    public void deleteEncadrant(String matricule) throws EncadrantNotFoundException {
         Encadrant encadrantId = this.findEncadrantByMatricule(matricule);
         this.encadrantRepository.delete(encadrantId);
     }
 
     @Override
-    public void updateEncadrant( Long matricule, EncadrantDto encadrantDto) throws EncadrantNotFoundException {
+    public void updateEncadrant(String matricule, EncadrantDto encadrantDto) throws EncadrantNotFoundException {
         Encadrant encadrantId = this.findEncadrantByMatricule(matricule);
         encadrantId.setMatricule((encadrantDto.getMatricule()));
         encadrantId.setNom(encadrantDto.getNom());
@@ -67,7 +67,7 @@ public class IEncadrantServiceImp implements IEncadrantService {
     }
 
     @Override
-    public Encadrant findEncadrantByMatricule(Long matricule) throws EncadrantNotFoundException {
+    public Encadrant findEncadrantByMatricule(String matricule) throws EncadrantNotFoundException {
         Optional<Encadrant> optionalEncadrant = this.encadrantRepository.findByMatricule(matricule);
         if(optionalEncadrant.isEmpty()){
             throw new EncadrantNotFoundException("Encadrand not found exception!");

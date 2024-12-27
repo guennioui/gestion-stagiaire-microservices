@@ -27,21 +27,22 @@ public class EncadrantController {
         return ResponseEntity.ok(encadrantDto);
     }
     @PutMapping(path = "/update/{encadrantId}")
-    public ResponseEntity<?> updateEncadrant(@PathVariable long encadrantId, @RequestBody EncadrantDto encadrantDto)
+    public ResponseEntity<?> updateEncadrant(@PathVariable String encadrantId, @RequestBody EncadrantDto encadrantDto)
         throws EncadrantNotFoundException {
         this.iEncadrantService.updateEncadrant(encadrantId, encadrantDto);
         return ResponseEntity.ok(encadrantDto);
     }
     @DeleteMapping(path = "/delete/{encadrantId}")
-    public ResponseEntity<Void> deleteEncadrant(@PathVariable long encadrantId)
+    public ResponseEntity<Void> deleteEncadrant(@PathVariable String encadrantId)
             throws EncadrantNotFoundException {
         this.iEncadrantService.deleteEncadrant(encadrantId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @GetMapping(path = "/{encadrantId}")
-    public ResponseEntity<EncadrantDto> findEncadrantById(@PathVariable long encadrantId)
+
+    @GetMapping(path = "/find-by-matricule/{matricule}")
+    public ResponseEntity<EncadrantDto> findEncadrantByMatricule(@PathVariable String matricule)
             throws EncadrantNotFoundException{
-        Encadrant encadrant = this.iEncadrantService.findEncadrantByMatricule(encadrantId);
+        Encadrant encadrant = this.iEncadrantService.findEncadrantByMatricule(matricule);
         EncadrantDto result = this.iEncadrantService.encadrantToEncadrantDto(encadrant);
         return ResponseEntity.ok(result);
     }
