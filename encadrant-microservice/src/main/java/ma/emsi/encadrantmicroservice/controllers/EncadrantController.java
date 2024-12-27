@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/encadrant")
+@CrossOrigin("*")
 public class EncadrantController {
     private final IEncadrantService iEncadrantService;
     @Autowired

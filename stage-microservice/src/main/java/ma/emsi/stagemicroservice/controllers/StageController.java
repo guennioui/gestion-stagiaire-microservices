@@ -63,4 +63,10 @@ public class StageController {
         return new ResponseEntity<>(HttpStatus.valueOf(200));
     }
 
+    @PostMapping(path = "/assign-encadrant-To-stage/{stageId}/{matriculeEncadrant}")
+    public ResponseEntity<?> assignEncadrantToStage(@PathVariable Long stageId, @PathVariable String matriculeEncadrant)
+            throws StageNotFoundException{
+        this.stageService.assignEncadrantToStage(stageId, matriculeEncadrant);
+        return new ResponseEntity<>(HttpStatus.valueOf(200));
+    }
 }

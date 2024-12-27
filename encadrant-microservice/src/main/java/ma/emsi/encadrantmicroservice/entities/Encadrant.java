@@ -7,7 +7,6 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Encadrant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

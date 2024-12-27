@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ma.emsi.stagemicroservice.dtos.DepartementDto;
+import ma.emsi.stagemicroservice.dtos.EncadrantDto;
 import ma.emsi.stagemicroservice.dtos.StagiaireDto;
 
 import java.time.LocalDate;
@@ -25,6 +26,9 @@ public class Stage {
     private LocalDate startDate;
     private LocalDate endDate;
     private String codeDepartement;
+    private String matriculeEncadrant;
     @Transient
     private DepartementDto departementDto;
+    @Transient
+    private EncadrantDto encadrantDto;
 }

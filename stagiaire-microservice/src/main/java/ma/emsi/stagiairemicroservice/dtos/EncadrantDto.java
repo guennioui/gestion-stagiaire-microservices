@@ -1,6 +1,5 @@
-package ma.emsi.stagemicroservice.dtos;
+package ma.emsi.stagiairemicroservice.dtos;
 
-import jakarta.persistence.Column;
 import lombok.*;
 
 @Getter

@@ -106,6 +106,14 @@ public class IStageServiceImpl implements IStageService {
                     throw new RuntimeException("une erreur s'est produite lors de l'appel du RestDepartementClient");
                 }
             }
+            if(stageByStageId.getMatriculeEncadrant() != null){
+                ResponseEntity<EncadrantDto> encadrantByMatricule = encadrantRestClient.findEncadrantByMatricule(stageByStageId.getMatriculeEncadrant());
+                if(encadrantByMatricule.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+                    stageByStageId.setEncadrantDto(encadrantByMatricule.getBody());
+                }else{
+                    throw new RuntimeException("une erreur s'est produite lors de l'appel du RestEncadrantClient");
+                }
+            }
         }
         return this.stageToStageDto(stageByStageId);
     }
@@ -114,15 +122,31 @@ public class IStageServiceImpl implements IStageService {
     public List<StageDto> getAll() {//assign for each stage his departementDto
         List<StageDto> stageDtos = new ArrayList<>();
         List<DepartementDto> departementDtos = new ArrayList<>();
+        List<EncadrantDto> encadrantDtos = new ArrayList<>();
+
         ResponseEntity<List<DepartementDto>> departements = departementRestClient.getAll();
+        ResponseEntity<List<EncadrantDto>> encadrants = encadrantRestClient.getAll();
+
         if(departements.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
             departementDtos.addAll(departements.getBody());
         }
+
+        if(encadrants.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+            encadrantDtos.addAll(encadrants.getBody());
+        }
+
         for(Stage stage : this.stageRepository.findAll()){
             if(stage.getCodeDepartement() != null){
                 for(DepartementDto departementDto : departementDtos){
                     if(departementDto.getCode().equals(stage.getCodeDepartement())){
                         stage.setDepartementDto(departementDto);
+                    }
+                }
+            }
+            if(stage.getMatriculeEncadrant() != null){
+                for(EncadrantDto encadrantDto : encadrantDtos){
+                    if(encadrantDto.getMatricule().equals(stage.getMatriculeEncadrant())){
+                        stage.setEncadrantDto(encadrantDto);
                     }
                 }
             }
@@ -164,6 +188,16 @@ public class IStageServiceImpl implements IStageService {
         StageDto stageById = this.findStageById(stageId);
         if(stageById != null){
             ResponseEntity<EncadrantDto> encadrantByMatricule = encadrantRestClient.findEncadrantByMatricule(matriculeEncadrant);
+            if(encadrantByMatricule.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+                Stage stage = this.stageDtoToStage(stageById);
+                stage.setMatriculeEncadrant(matriculeEncadrant);
+                stage.setEncadrantDto(encadrantByMatricule.getBody());
+                this.stageRepository.save(stage);
+            }else{
+                throw new RuntimeException("une erreur s'est produite lors de l'appel du RestEncadrantClient");
+            }
+        }else{
+                throw new StageNotFoundException("stage not found exception");
         }
 
     }
