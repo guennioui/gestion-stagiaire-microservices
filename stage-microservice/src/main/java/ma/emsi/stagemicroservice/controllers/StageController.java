@@ -51,6 +51,7 @@ public class StageController {
 
     @GetMapping(path = "/all")
     public ResponseEntity<List<StageDto>> getAll(){
+        System.out.println("achieved");
         List<StageDto> all = this.stageService.getAll();
         return ResponseEntity.ok(all);
     }

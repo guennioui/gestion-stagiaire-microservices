@@ -94,11 +94,13 @@ public class IStageServiceImpl implements IStageService {
             throw new StageNotFoundException("stage not found!");
         }else{
             stageByStageId = optionalStage.get();
-            ResponseEntity<DepartementDto> departementByCode = departementRestClient.findDepartementByCode(stageByStageId.getCodeDepartement());
-            if(departementByCode.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
-                stageByStageId.setDepartementDto(departementByCode.getBody());
-            }else{
-                throw new RuntimeException("une erreur s'est produite lors de l'appel du RestDepartementClient");
+            if(stageByStageId.getCodeDepartement() != null){
+                ResponseEntity<DepartementDto> departementByCode = departementRestClient.findDepartementByCode(stageByStageId.getCodeDepartement());
+                if(departementByCode.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+                    stageByStageId.setDepartementDto(departementByCode.getBody());
+                }else{
+                    throw new RuntimeException("une erreur s'est produite lors de l'appel du RestDepartementClient");
+                }
             }
         }
         return this.stageToStageDto(stageByStageId);
@@ -140,6 +142,8 @@ public class IStageServiceImpl implements IStageService {
         StageDto stageById = this.findStageById(stageId);
         if(stageById != null){
             ResponseEntity<DepartementDto> departementByCode = departementRestClient.findDepartementByCode(codeDepartement);
+            System.out.println("143: "+departementByCode.getStatusCode());
+            System.out.println("143: "+departementByCode.getBody());
             if(departementByCode.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
                 Stage stage = this.stageDtoToStage(stageById);
                 stage.setCodeDepartement(codeDepartement);
