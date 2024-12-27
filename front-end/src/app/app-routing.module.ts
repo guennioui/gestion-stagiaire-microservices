@@ -4,6 +4,7 @@ import {SideBarComponent} from "./components/side-bar/side-bar.component";
 import {HomeComponent} from "./components/home/home.component";
 import {StagiaireComponent} from "./components/stagiaire/stagiaire.component";
 import {StageComponent} from "./components/stage/stage.component";
+import {DepartementComponent} from "./components/departement/departement.component";
 
 const routes: Routes = [
   {path:'sideBar',component:SideBarComponent},
@@ -11,6 +12,7 @@ const routes: Routes = [
   {path:'home',component:HomeComponent},
   {path: 'stagiaires', component: StagiaireComponent},
   {path: 'stages', component: StageComponent},
+  {path: 'departements', component: DepartementComponent},
 ];
 
 @NgModule({
