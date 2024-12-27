@@ -5,6 +5,7 @@ import {NgForm} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
 import {StagiaireService} from "../../services/stagiaire.service";
 import {Stagiaire} from "../../models/stagiaire.model";
+import {PageResponse} from "../../models/PageResponse";
 
 @Component({
   selector: 'app-stagiaire',
@@ -16,6 +17,10 @@ export class StagiaireComponent implements OnInit{
   updateStagiaire: Stagiaire | null = null;
   deletedMatricule: string | null = null;
   stageOfSelectedStagiaire: Stage | null = null;
+  currentPage: number = 0;
+  pageSize: number = 5;
+  totalItems: number = 0;
+  totalPages: number = 0;
 
   constructor(private stagiaireService: StagiaireService) {}
 
@@ -97,9 +102,18 @@ export class StagiaireComponent implements OnInit{
     }
   }
 
-  public getStagiaires(): void{
-    this.stagiaireService.getStagiaires().subscribe((data:any)=>{
-      this.stagiaires = data;
-    });
+  public getStagiaires(): void {
+    this.stagiaireService.getStagiaires(this.currentPage, this.pageSize)
+      .subscribe((response: PageResponse) => {
+        this.stagiaires = response.stagiaires;
+        this.currentPage = response.currentPage;
+        this.totalItems = response.totalItems;
+        this.totalPages = response.totalPages;
+      });
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.getStagiaires();
   }
 }

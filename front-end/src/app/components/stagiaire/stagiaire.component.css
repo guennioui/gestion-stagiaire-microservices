@@ -124,6 +124,9 @@ table.table .avatar {
   float: right;
   margin: 0 0 5px;
 }
+.pagination a {
+  cursor: pointer;
+}
 .pagination li a {
   border: none;
   font-size: 13px;
