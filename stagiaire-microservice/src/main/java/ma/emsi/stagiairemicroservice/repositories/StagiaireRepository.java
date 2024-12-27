@@ -1,6 +1,8 @@
 package ma.emsi.stagiairemicroservice.repositories;
 
 import ma.emsi.stagiairemicroservice.entities.Stagiaire;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,5 @@ import java.util.Optional;
 public interface StagiaireRepository extends JpaRepository<Stagiaire, Long> {
     Optional<Stagiaire> findByMatricule(String matricule);
     List<Stagiaire> findAllByStageId(Long stageId);
+    Page<Stagiaire> findAll(Pageable pageable);
 }

@@ -9,6 +9,9 @@ import ma.emsi.stagiairemicroservice.mappers.StagiaireMapper;
 import ma.emsi.stagiairemicroservice.repositories.StagiaireRepository;
 import ma.emsi.stagiairemicroservice.services.IService.IStagiaireService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -96,6 +99,28 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     }
 
     @Override
+    public Page<StagiaireDto> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Stagiaire> stagiairePage = stagiaireRepository.findAll(pageable);
+
+        List<StageDto> stageDtos = new ArrayList<>();
+        ResponseEntity<List<StageDto>> stages = stageRestClient.getAll();
+        if(stages.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+            stageDtos.addAll(stages.getBody());
+        }
+
+        return stagiairePage.map(stagiaire -> {
+            if(stagiaire.getStageId() != null){
+                stageDtos.stream()
+                        .filter(stageDto -> stageDto.getStageId() == stagiaire.getStageId())
+                        .findFirst()
+                        .ifPresent(stagiaire::setStageDto);
+            }
+            return stagiaireToStagiaireDTO(stagiaire);
+        });
+    }
+
+    @Override
     public void assignStageToStagiaire(String matricule, Long stageId) throws StagiaireNotFoundException {
         Stagiaire byMatricule = this.findByMatricule(matricule);
         if(byMatricule != null){
@@ -115,10 +140,19 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     @Override
     public List<StagiaireDto> getStagiairesByStageId(Long stageId) {
         List<StagiaireDto> stagiaireDtos = new ArrayList<>();
-        for(Stagiaire stagiaire : this.stagiaireRepository.findAllByStageId(stageId)){
-            stagiaireDtos.add(
-                    this.stagiaireToStagiaireDTO(stagiaire)
-            );
+        List<Stagiaire> allByStageId = this.stagiaireRepository.findAllByStageId(stageId);
+        for(Stagiaire stagiaire : allByStageId){
+            if(stagiaire.getStageId() != null){
+                ResponseEntity<StageDto> stageById = stageRestClient.findStageById(stagiaire.getStageId());
+                if(stageById.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+                    stagiaire.setStageDto(stageById.getBody());
+                }else{
+                    throw new RuntimeException("une erreur s'est produite lors de l'appel du StageRestClient");
+                }
+            }else{
+                throw new RuntimeException("Stage not found exception");
+            }
+            stagiaireDtos.add(this.stagiaireToStagiaireDTO(stagiaire));
         }
         return stagiaireDtos;
     }

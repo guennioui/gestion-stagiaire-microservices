@@ -7,11 +7,14 @@ import ma.emsi.stagiairemicroservice.exceptions.StagiaireAlreadyExistException;
 import ma.emsi.stagiairemicroservice.exceptions.StagiaireNotFoundException;
 import ma.emsi.stagiairemicroservice.services.IService.IStagiaireService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/stagiaire")
@@ -65,6 +68,21 @@ public class StagiaireController {
     @GetMapping(path = "/all")
     public ResponseEntity<List<StagiaireDto>> findAllStagiaire(){
         return ResponseEntity.ok(this.stagiaireService.getAll());
+    }
+    @GetMapping(path = "/get-all")
+    public ResponseEntity<Map<String, Object>> findAllStagiaire(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        Page<StagiaireDto> stagiairePage = stagiaireService.getAll(page, size);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("stagiaires", stagiairePage.getContent());
+        response.put("currentPage", stagiairePage.getNumber());
+        response.put("totalItems", stagiairePage.getTotalElements());
+        response.put("totalPages", stagiairePage.getTotalPages());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(path = "/find-by-stageId/{stageId}")
