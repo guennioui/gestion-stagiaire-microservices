@@ -11,6 +11,8 @@ import {FormsModule} from "@angular/forms";
 import {CommandModule} from "@angular/cli/src/command-builder/command-module";
 import { StagiaireComponent } from './components/stagiaire/stagiaire.component';
 import { StageComponent } from './components/stage/stage.component';
+import { DepartementComponent } from './components/departement/departement.component';
+import { EncadrantComponent } from './components/encadrant/encadrant.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { StageComponent } from './components/stage/stage.component';
     HomeComponent,
     SideBarComponent,
     StagiaireComponent,
-    StageComponent
+    StageComponent,
+    DepartementComponent,
+    EncadrantComponent
   ],
   imports: [
     BrowserModule,
