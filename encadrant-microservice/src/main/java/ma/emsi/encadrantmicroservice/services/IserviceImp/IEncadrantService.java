@@ -10,10 +10,10 @@ import java.util.List;
 public interface IEncadrantService {
 
     void addEncadrant(EncadrantDto encadrantDto) throws EncadrantNotFoundException, EncadrantAlreadyExistException;
-    void deleteEncadrant(Long id) throws EncadrantNotFoundException;
-    void updateEncadrant(Long EncadrantId, EncadrantDto encadrantDto) throws EncadrantNotFoundException;
+    void deleteEncadrant(String matricule) throws EncadrantNotFoundException;
+    void updateEncadrant(String matricule, EncadrantDto encadrantDto) throws EncadrantNotFoundException;
     List<EncadrantDto> getAll();
-    Encadrant findEncadrantByMatricule(Long matricule) throws EncadrantNotFoundException;
+    Encadrant findEncadrantByMatricule(String matricule) throws EncadrantNotFoundException;
     Encadrant encadrantDtoToEncadrant(EncadrantDto encadrantDto);
     EncadrantDto encadrantToEncadrantDto(Encadrant encadrant);
 }

@@ -16,4 +16,5 @@ public interface IStageService {
     StageDto stageToStageDto(Stage stage);
     Stage stageDtoToStage(StageDto stageDto);
     void assignDepartementToStage(Long stageId, String codeDepartement) throws StageNotFoundException;
+    void assignEncadrantToStage(Long stageId, String matriculeEncadrant) throws StageNotFoundException;
 }

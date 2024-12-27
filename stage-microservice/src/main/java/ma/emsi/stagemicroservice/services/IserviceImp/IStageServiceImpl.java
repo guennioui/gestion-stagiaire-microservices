@@ -1,8 +1,10 @@
 package ma.emsi.stagemicroservice.services.IserviceImp;
 
 import ma.emsi.stagemicroservice.clients.DepartementRestClient;
+import ma.emsi.stagemicroservice.clients.EncadrantRestClient;
 import ma.emsi.stagemicroservice.clients.StagiaireRestClient;
 import ma.emsi.stagemicroservice.dtos.DepartementDto;
+import ma.emsi.stagemicroservice.dtos.EncadrantDto;
 import ma.emsi.stagemicroservice.dtos.StageDto;
 import ma.emsi.stagemicroservice.dtos.StagiaireDto;
 import ma.emsi.stagemicroservice.exceptions.StageAlreadyExistingException;
@@ -27,12 +29,14 @@ public class IStageServiceImpl implements IStageService {
     private final StageRepository stageRepository;
     private final StagiaireRestClient stagiaireRestClient;
     private final DepartementRestClient departementRestClient;
+    private final EncadrantRestClient encadrantRestClient;
 
     @Autowired
-    public IStageServiceImpl(StageRepository stageRepository, StagiaireRestClient stagiaireRestClient, DepartementRestClient departementRestClient) {
+    public IStageServiceImpl(StageRepository stageRepository, StagiaireRestClient stagiaireRestClient, DepartementRestClient departementRestClient, EncadrantRestClient encadrantRestClient) {
         this.stageRepository = stageRepository;
         this.stagiaireRestClient = stagiaireRestClient;
         this.departementRestClient = departementRestClient;
+        this.encadrantRestClient = encadrantRestClient;
     }
 
     @Override
@@ -102,6 +106,14 @@ public class IStageServiceImpl implements IStageService {
                     throw new RuntimeException("une erreur s'est produite lors de l'appel du RestDepartementClient");
                 }
             }
+            if(stageByStageId.getMatriculeEncadrant() != null){
+                ResponseEntity<EncadrantDto> encadrantByMatricule = encadrantRestClient.findEncadrantByMatricule(stageByStageId.getMatriculeEncadrant());
+                if(encadrantByMatricule.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+                    stageByStageId.setEncadrantDto(encadrantByMatricule.getBody());
+                }else{
+                    throw new RuntimeException("une erreur s'est produite lors de l'appel du RestEncadrantClient");
+                }
+            }
         }
         return this.stageToStageDto(stageByStageId);
     }
@@ -110,15 +122,31 @@ public class IStageServiceImpl implements IStageService {
     public List<StageDto> getAll() {//assign for each stage his departementDto
         List<StageDto> stageDtos = new ArrayList<>();
         List<DepartementDto> departementDtos = new ArrayList<>();
+        List<EncadrantDto> encadrantDtos = new ArrayList<>();
+
         ResponseEntity<List<DepartementDto>> departements = departementRestClient.getAll();
+        ResponseEntity<List<EncadrantDto>> encadrants = encadrantRestClient.getAll();
+
         if(departements.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
             departementDtos.addAll(departements.getBody());
         }
+
+        if(encadrants.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+            encadrantDtos.addAll(encadrants.getBody());
+        }
+
         for(Stage stage : this.stageRepository.findAll()){
             if(stage.getCodeDepartement() != null){
                 for(DepartementDto departementDto : departementDtos){
                     if(departementDto.getCode().equals(stage.getCodeDepartement())){
                         stage.setDepartementDto(departementDto);
+                    }
+                }
+            }
+            if(stage.getMatriculeEncadrant() != null){
+                for(EncadrantDto encadrantDto : encadrantDtos){
+                    if(encadrantDto.getMatricule().equals(stage.getMatriculeEncadrant())){
+                        stage.setEncadrantDto(encadrantDto);
                     }
                 }
             }
@@ -142,8 +170,6 @@ public class IStageServiceImpl implements IStageService {
         StageDto stageById = this.findStageById(stageId);
         if(stageById != null){
             ResponseEntity<DepartementDto> departementByCode = departementRestClient.findDepartementByCode(codeDepartement);
-            System.out.println("143: "+departementByCode.getStatusCode());
-            System.out.println("143: "+departementByCode.getBody());
             if(departementByCode.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
                 Stage stage = this.stageDtoToStage(stageById);
                 stage.setCodeDepartement(codeDepartement);
@@ -155,5 +181,24 @@ public class IStageServiceImpl implements IStageService {
         }else{
             throw new StageNotFoundException("stage not found exception");
         }
+    }
+
+    @Override
+    public void assignEncadrantToStage(Long stageId, String matriculeEncadrant) throws StageNotFoundException {
+        StageDto stageById = this.findStageById(stageId);
+        if(stageById != null){
+            ResponseEntity<EncadrantDto> encadrantByMatricule = encadrantRestClient.findEncadrantByMatricule(matriculeEncadrant);
+            if(encadrantByMatricule.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+                Stage stage = this.stageDtoToStage(stageById);
+                stage.setMatriculeEncadrant(matriculeEncadrant);
+                stage.setEncadrantDto(encadrantByMatricule.getBody());
+                this.stageRepository.save(stage);
+            }else{
+                throw new RuntimeException("une erreur s'est produite lors de l'appel du RestEncadrantClient");
+            }
+        }else{
+                throw new StageNotFoundException("stage not found exception");
+        }
+
     }
 }

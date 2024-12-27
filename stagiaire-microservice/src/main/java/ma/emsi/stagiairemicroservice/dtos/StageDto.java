@@ -15,4 +15,6 @@ public class StageDto {
     private LocalDate endDate;
     private String codeDepartement;
     private DepartementDto departementDto;
+    private String matriculeEncadrant;
+    private EncadrantDto encadrantDto;
 }

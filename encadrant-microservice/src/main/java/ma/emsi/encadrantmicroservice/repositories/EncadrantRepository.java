@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface EncadrantRepository extends JpaRepository<Encadrant, Long> {
 
-    Optional<Encadrant> findByMatricule(Long matricule);
+    Optional<Encadrant> findByMatricule(String matricule);
 }
