@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Encadrant} from "../models/encadrant.model";
-import {PageResponse} from "../models/PageResponse";
 import {EncadrantPageResponse} from "../models/encadrantPageResponse";
 
 @Injectable({
