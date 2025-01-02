@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {PageResponse} from "../models/PageResponse";
+import {PageResponse} from "../models/pageResponse";
 import {Stagiaire} from "../models/stagiaire.model";
 import {Departement} from "../models/departement.model";
 import {Stage} from "../models/stage.model";
+import {StagePageResponse} from "../models/stagePageResponse";
+import {DepartementPageResponse} from "../models/departementPageResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +16,8 @@ export class DepartementService {
   private apiServerUrl = "http://127.0.0.1:8082/api/departement"
   constructor(private http: HttpClient) { }
 
-  public getDepartements():Observable<Departement[]>{
-    return this.http.get<Departement[]>(this.apiServerUrl+'/all');
+  public getDepartements(page: number, size: number): Observable<DepartementPageResponse> {
+    return this.http.get<DepartementPageResponse>(`${this.apiServerUrl}/get-all?page=${page}&size=${size}`);
   }
 
   public addDepartement(data: Departement): Observable<Departement>{

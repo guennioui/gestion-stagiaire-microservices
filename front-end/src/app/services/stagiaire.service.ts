@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Stage} from "../models/stage.model";
 import {Stagiaire} from "../models/stagiaire.model";
-import {PageResponse} from "../models/PageResponse";
+import {PageResponse} from "../models/pageResponse";
 
 @Injectable({
   providedIn: 'root'
