@@ -8,6 +8,10 @@ import ma.emsi.departementmicroservice.mappers.DepartementMapper;
 import ma.emsi.departementmicroservice.repositories.DepartementRepository;
 import ma.emsi.departementmicroservice.services.IService.IDepartementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +67,13 @@ public class IDepartementServiceImpl implements IDepartementService {
             departementDtos.add(this.DepartementToDepartementDto(departement));
         }
         return departementDtos;
+    }
+
+    @Override
+    public Page<DepartementDto> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Departement> departementPage = departementRepository.findAll(pageable);
+        return departementPage.map(this::DepartementToDepartementDto);
     }
 
     @Override
