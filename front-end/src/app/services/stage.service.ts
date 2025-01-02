@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Stage} from "../models/stage.model";
+import {StagePageResponse} from "../models/stagePageResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,8 @@ export class StageService {
   private apiServerUrl = "http://127.0.0.1:8081/api/stage"
   constructor(private http: HttpClient) { }
 
-  public getStages():Observable<Stage[]>{
-    return this.http.get<Stage[]>(this.apiServerUrl+'/all');
+  public getStages(page: number, size: number): Observable<StagePageResponse> {
+    return this.http.get<StagePageResponse>(`${this.apiServerUrl}/get-all?page=${page}&size=${size}`);
   }
 
   public addStage(data: Stage): Observable<Stage>{

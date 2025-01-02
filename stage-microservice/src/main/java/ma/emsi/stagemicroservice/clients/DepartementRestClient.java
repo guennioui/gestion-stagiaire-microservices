@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @FeignClient(name = "departement-service", url = "http://localhost:8082/api/departement")
 public interface DepartementRestClient {
@@ -22,6 +23,6 @@ public interface DepartementRestClient {
     @GetMapping(path = "/{code}")
     public ResponseEntity<DepartementDto> findDepartementByCode(@PathVariable String code);
 
-    @GetMapping(path = "/all")
-    public ResponseEntity<List<DepartementDto>> getAll();
+    @GetMapping(path = "/get-all")
+    public ResponseEntity<Map<String, Object>> getAll();
 }

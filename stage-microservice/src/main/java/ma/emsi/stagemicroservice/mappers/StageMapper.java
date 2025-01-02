@@ -9,8 +9,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface StageMapper {
     StageMapper INSTANCE = Mappers.getMapper(StageMapper.class);
-    @Mapping(source = "id", target = "id")
     Stage stageDtoToStage(StageDto stageDto);
-    @Mapping(source = "id", target = "id")
     StageDto stageToStageDto(Stage stage);
 }

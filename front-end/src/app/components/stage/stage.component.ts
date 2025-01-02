@@ -3,6 +3,7 @@ import {StageService} from "../../services/stage.service";
 import {NgForm} from "@angular/forms";
 import {Stage} from "../../models/stage.model";
 import {HttpErrorResponse} from "@angular/common/http";
+import {StagePageResponse} from "../../models/stagePageResponse";
 
 @Component({
   selector: 'app-stage',
@@ -13,7 +14,10 @@ export class StageComponent implements OnInit{
   stages: Stage[] = [];
   updateStage: Stage | null = null;
   deleteId: number | null = null;
-
+  currentPage: number = 0;
+  pageSize: number = 5;
+  totalItems: number = 0;
+  totalPages: number = 0;
   constructor(private stageService: StageService) {}
 
   ngOnInit(): void {
@@ -84,10 +88,19 @@ export class StageComponent implements OnInit{
     }
   }
 
-  public getStages(): void{
-    this.stageService.getStages().subscribe((data:any)=>{
-      this.stages = data;
-    });
+  public getStages(): void {
+    this.stageService.getStages(this.currentPage, this.pageSize)
+      .subscribe((response: StagePageResponse) => {
+        this.stages = response.content;
+        this.currentPage = response.currentPage;
+        this.totalItems = response.totalItems;
+        this.totalPages = response.totalPages;
+      });
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.getStages();
   }
 
 }

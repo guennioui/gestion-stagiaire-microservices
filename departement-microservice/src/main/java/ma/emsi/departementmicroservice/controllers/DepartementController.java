@@ -6,11 +6,14 @@ import ma.emsi.departementmicroservice.exceptions.DepartementAlreadyExistExcepti
 import ma.emsi.departementmicroservice.exceptions.DepartementNotFoundException;
 import ma.emsi.departementmicroservice.services.IService.IDepartementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/departement")
@@ -51,9 +54,19 @@ public class DepartementController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(path = "/all")
-    public ResponseEntity<List<DepartementDto>> getAll(){
-        List<DepartementDto> all = this.iDepartementService .getAll();
-        return ResponseEntity.ok(all);
+    @GetMapping(path = "/get-all")
+    public ResponseEntity<Map<String, Object>> findAllStage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        Page<DepartementDto> stagePage = iDepartementService.getAll(page, size);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", stagePage.getContent());
+        response.put("currentPage", stagePage.getNumber());
+        response.put("totalItems", stagePage.getTotalElements());
+        response.put("totalPages", stagePage.getTotalPages());
+
+        return ResponseEntity.ok(response);
     }
 }

@@ -5,7 +5,7 @@ import {NgForm} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
 import {StagiaireService} from "../../services/stagiaire.service";
 import {Stagiaire} from "../../models/stagiaire.model";
-import {PageResponse} from "../../models/PageResponse";
+import {PageResponse} from "../../models/pageResponse";
 
 @Component({
   selector: 'app-stagiaire',

@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Stage} from "../models/stage.model";
 import {Stagiaire} from "../models/stagiaire.model";
-import {PageResponse} from "../models/PageResponse";
+import {PageResponse} from "../models/pageResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,4 @@ export class StagiaireService {
   public assignStageToStagiaire(matricule: string, stageId: number):Observable<string>{
     return this.http.post<string>(this.apiServerUrl+'/assign-stagiaire/'+matricule+'/'+stageId, {});
   }
-
-
 }

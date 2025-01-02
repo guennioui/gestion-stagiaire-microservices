@@ -93,6 +93,20 @@ table.table td a.settings {
 table.table td a.delete {
   color: #F44336;
 }
+a.delete :hover{
+  cursor: pointer;
+}
+a.settings:hover{
+  cursor: pointer;
+}
+a.assign-icon :hover{
+  cursor: pointer;
+}
+a.view :hover{
+  cursor: pointer;
+}
+
+
 table.table td i {
   font-size: 19px;
 }
@@ -158,12 +172,12 @@ table.table .avatar {
   font-size: 13px;
 }
 
-a.delete :hover{
-  cursor: pointer;
+.modal-header{
+  background: #1d1b31;
 }
-a.settings:hover{
-  cursor: pointer;
+.modal-title{
+  color: wheat;
 }
-a.view:hover{
-  cursor: pointer;
+.custom-modal .modal-dialog {
+  max-width: 66%;
 }
