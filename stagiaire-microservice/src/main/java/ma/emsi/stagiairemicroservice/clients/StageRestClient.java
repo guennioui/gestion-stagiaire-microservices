@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @FeignClient(name = "stage-service", url = "http://localhost:8081/api/stage")
 public interface StageRestClient {
@@ -23,6 +23,6 @@ public interface StageRestClient {
     @GetMapping(path = "/{stageId}")
     public ResponseEntity<StageDto> findStageById(@PathVariable long stageId);
 
-    @GetMapping(path = "/all")
-    public ResponseEntity<List<StageDto>> getAll();
+    @GetMapping(path = "/get-all")
+    public ResponseEntity<Map<String, Object>> getAll();
 }

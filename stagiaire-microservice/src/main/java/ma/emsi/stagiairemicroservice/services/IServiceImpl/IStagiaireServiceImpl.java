@@ -1,5 +1,7 @@
 package ma.emsi.stagiairemicroservice.services.IServiceImpl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ma.emsi.stagiairemicroservice.clients.StageRestClient;
 import ma.emsi.stagiairemicroservice.dtos.StageDto;
 import ma.emsi.stagiairemicroservice.dtos.StagiaireDto;
@@ -17,9 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -81,9 +82,14 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     public List<StagiaireDto> getAll() {//method template
         List<StagiaireDto> stagiaireDtos = new ArrayList<>();
         List<StageDto> stageDtos = new ArrayList<>();
-        ResponseEntity<List<StageDto>> stages = stageRestClient.getAll();
+        ResponseEntity<Map<String, Object>> stages = stageRestClient.getAll();
         if(stages.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
-            stageDtos.addAll(stages.getBody());
+            List<LinkedHashMap<String, Object>> content = (List<LinkedHashMap<String, Object>>) stages.getBody().get("content");
+            ObjectMapper mapper = new ObjectMapper();
+            List<StageDto> dtos = content.stream()
+                    .map(obj -> mapper.convertValue(obj, StageDto.class))
+                    .collect(Collectors.toList());
+            stageDtos.addAll(dtos);
         }
         for(Stagiaire stagiaire : this.stagiaireRepository.findAll()){
             if(stagiaire.getStageId() != null){
@@ -102,11 +108,17 @@ public class IStagiaireServiceImpl implements IStagiaireService {
     public Page<StagiaireDto> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Stagiaire> stagiairePage = stagiaireRepository.findAll(pageable);
-
         List<StageDto> stageDtos = new ArrayList<>();
-        ResponseEntity<List<StageDto>> stages = stageRestClient.getAll();
+        ResponseEntity<Map<String, Object>> stages = stageRestClient.getAll();
+
         if(stages.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
-            stageDtos.addAll(stages.getBody());
+            List<LinkedHashMap<String, Object>> content = (List<LinkedHashMap<String, Object>>) stages.getBody().get("content");
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            List<StageDto> dtos = content.stream()
+                    .map(obj -> mapper.convertValue(obj, StageDto.class))
+                    .collect(Collectors.toList());
+            stageDtos.addAll(dtos);
         }
 
         return stagiairePage.map(stagiaire -> {

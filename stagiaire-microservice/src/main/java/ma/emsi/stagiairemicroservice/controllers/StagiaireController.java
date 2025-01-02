@@ -69,10 +69,11 @@ public class StagiaireController {
     public ResponseEntity<List<StagiaireDto>> findAllStagiaire(){
         return ResponseEntity.ok(this.stagiaireService.getAll());
     }
+
     @GetMapping(path = "/get-all")
     public ResponseEntity<Map<String, Object>> findAllStagiaire(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
+            @RequestParam(defaultValue = "5") int size
     ) {
         Page<StagiaireDto> stagiairePage = stagiaireService.getAll(page, size);
 
