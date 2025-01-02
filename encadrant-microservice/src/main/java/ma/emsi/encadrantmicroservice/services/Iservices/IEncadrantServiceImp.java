@@ -1,6 +1,8 @@
 package ma.emsi.encadrantmicroservice.services.Iservices;
 
+import ma.emsi.encadrantmicroservice.clients.StageRestClient;
 import ma.emsi.encadrantmicroservice.dtos.EncadrantDto;
+import ma.emsi.encadrantmicroservice.dtos.StageDto;
 import ma.emsi.encadrantmicroservice.entities.Encadrant;
 import ma.emsi.encadrantmicroservice.exceptions.EncadrantAlreadyExistException;
 import ma.emsi.encadrantmicroservice.exceptions.EncadrantNotFoundException;
@@ -8,6 +10,11 @@ import ma.emsi.encadrantmicroservice.mappers.EncadrantMapper;
 import ma.emsi.encadrantmicroservice.repositories.EncadrantRepository;
 import ma.emsi.encadrantmicroservice.services.IserviceImp.IEncadrantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,9 +24,11 @@ import java.util.Optional;
 @Service
 public class IEncadrantServiceImp implements IEncadrantService {
     private final EncadrantRepository encadrantRepository;
+    private final StageRestClient stageRestClient;
     @Autowired
-    public IEncadrantServiceImp(EncadrantRepository encadrantRepository) {
+    public IEncadrantServiceImp(EncadrantRepository encadrantRepository, StageRestClient stageRestClient) {
         this.encadrantRepository = encadrantRepository;
+        this.stageRestClient = stageRestClient;
     }
 
     @Override
@@ -79,6 +88,13 @@ public class IEncadrantServiceImp implements IEncadrantService {
     public EncadrantDto encadrantToEncadrantDto(Encadrant encadrant) {
         return EncadrantMapper.INSTANCE.encadrantToEncadrantDto(encadrant);
 
+    }
+
+    @Override
+    public Page<EncadrantDto> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Encadrant> encadrantPage = encadrantRepository.findAll(pageable);
+        return encadrantPage.map(this::encadrantToEncadrantDto);
     }
 
     @Override

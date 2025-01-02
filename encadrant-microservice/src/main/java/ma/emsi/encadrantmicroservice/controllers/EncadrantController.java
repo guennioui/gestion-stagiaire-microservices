@@ -6,11 +6,14 @@ import ma.emsi.encadrantmicroservice.exceptions.EncadrantAlreadyExistException;
 import ma.emsi.encadrantmicroservice.exceptions.EncadrantNotFoundException;
 import ma.emsi.encadrantmicroservice.services.IserviceImp.IEncadrantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/encadrant")
@@ -51,5 +54,21 @@ public class EncadrantController {
     public ResponseEntity<List<EncadrantDto>> getAll(){
         List<EncadrantDto> all = this.iEncadrantService.getAll();
         return ResponseEntity.ok(all);
+    }
+
+    @GetMapping(path = "/get-all")
+    public ResponseEntity<Map<String, Object>> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        Page<EncadrantDto> encadrantPage = iEncadrantService.getAll(page, size);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("encadrants", encadrantPage.getContent());
+        response.put("currentPage", encadrantPage.getNumber());
+        response.put("totalItems", encadrantPage.getTotalElements());
+        response.put("totalPages", encadrantPage.getTotalPages());
+
+        return ResponseEntity.ok(response);
     }
 }

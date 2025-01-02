@@ -2,6 +2,7 @@ package ma.emsi.encadrantmicroservice.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ma.emsi.encadrantmicroservice.dtos.StageDto;
 
 @Entity
 @Data
@@ -18,4 +19,7 @@ public class Encadrant {
     private String email;
     private String telephone;
     private String specialite;
+    private Long stageId;
+    @Transient
+    private StageDto stageDto;
 }

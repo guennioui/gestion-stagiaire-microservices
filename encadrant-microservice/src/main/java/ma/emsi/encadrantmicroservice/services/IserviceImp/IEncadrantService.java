@@ -4,6 +4,7 @@ import ma.emsi.encadrantmicroservice.dtos.EncadrantDto;
 import ma.emsi.encadrantmicroservice.entities.Encadrant;
 import ma.emsi.encadrantmicroservice.exceptions.EncadrantAlreadyExistException;
 import ma.emsi.encadrantmicroservice.exceptions.EncadrantNotFoundException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface IEncadrantService {
     Encadrant findEncadrantByMatricule(String matricule) throws EncadrantNotFoundException;
     Encadrant encadrantDtoToEncadrant(EncadrantDto encadrantDto);
     EncadrantDto encadrantToEncadrantDto(Encadrant encadrant);
+    Page<EncadrantDto> getAll(int page, int size);
 }
