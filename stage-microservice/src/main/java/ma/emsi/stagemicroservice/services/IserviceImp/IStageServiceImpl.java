@@ -1,5 +1,7 @@
 package ma.emsi.stagemicroservice.services.IserviceImp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ma.emsi.stagemicroservice.clients.DepartementRestClient;
 import ma.emsi.stagemicroservice.clients.EncadrantRestClient;
 import ma.emsi.stagemicroservice.clients.StagiaireRestClient;
@@ -14,14 +16,17 @@ import ma.emsi.stagemicroservice.entities.Stage;
 import ma.emsi.stagemicroservice.repositories.StageRepository;
 import ma.emsi.stagemicroservice.services.Iservice.IStageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -124,16 +129,25 @@ public class IStageServiceImpl implements IStageService {
         List<DepartementDto> departementDtos = new ArrayList<>();
         List<EncadrantDto> encadrantDtos = new ArrayList<>();
 
-        ResponseEntity<List<DepartementDto>> departements = departementRestClient.getAll();
+        ResponseEntity<Map<String, Object>> departements = departementRestClient.getAll();
         ResponseEntity<List<EncadrantDto>> encadrants = encadrantRestClient.getAll();
 
         if(departements.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
-            departementDtos.addAll(departements.getBody());
+            ObjectMapper mapper = new ObjectMapper();
+            List<LinkedHashMap<String, Object>> content = (List<LinkedHashMap<String, Object>>) departements.getBody().get("content");
+            List<DepartementDto> dtos = content.stream()
+                    .map(obj -> mapper.convertValue(obj, DepartementDto.class))
+                    .collect(Collectors.toList());
+            departementDtos.addAll(dtos);
         }
 
         if(encadrants.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
             encadrantDtos.addAll(encadrants.getBody());
         }
+        System.out.println("141: "+departementDtos);
+        System.out.println("142: "+encadrantDtos);
+        System.out.println("143: "+departements);
+        System.out.println("144: "+encadrants);
 
         for(Stage stage : this.stageRepository.findAll()){
             if(stage.getCodeDepartement() != null){
@@ -153,6 +167,41 @@ public class IStageServiceImpl implements IStageService {
             stageDtos.add(this.stageToStageDto(stage));
         }
         return stageDtos;
+    }
+
+    @Override
+    public Page<StageDto> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Stage> stagePage = stageRepository.findAll(pageable);
+        List<DepartementDto> departementDtos = new ArrayList<>();
+        List<EncadrantDto> encadrantDtos = new ArrayList<>();
+
+        ResponseEntity<Map<String, Object>> departements = departementRestClient.getAll();
+        ResponseEntity<List<EncadrantDto>> encadrants = encadrantRestClient.getAll();
+
+        if(departements.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))
+                && encadrants.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+            List<LinkedHashMap<String, Object>> departement_content = (List<LinkedHashMap<String, Object>>) departements.getBody().get("content");
+            ObjectMapper mapper = new ObjectMapper();
+            departementDtos.addAll(departement_content.stream().map(obj -> mapper.convertValue(obj, DepartementDto.class)).collect(Collectors.toList()));
+            encadrantDtos.addAll(encadrants.getBody());
+        }
+
+        return stagePage.map(stage->{
+            if(stage.getCodeDepartement() != null && stage.getMatriculeEncadrant() != null){
+                departementDtos
+                        .stream()
+                        .filter(departementDto -> departementDto.getCode().equals(stage.getCodeDepartement()))
+                        .findFirst()
+                        .ifPresent(stage::setDepartementDto);
+                encadrantDtos
+                        .stream()
+                        .filter(encadrantDto -> encadrantDto.getMatricule().equals(stage.getMatriculeEncadrant()))
+                        .findFirst()
+                        .ifPresent(stage::setEncadrantDto);
+            }
+        return stageToStageDto(stage);
+        });
     }
 
     @Override

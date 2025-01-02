@@ -3,6 +3,7 @@ import {NgForm} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
 import {Departement} from "../../models/departement.model";
 import {DepartementService} from "../../services/departement.service";
+import {DepartementPageResponse} from "../../models/departementPageResponse";
 
 @Component({
   selector: 'app-departement',
@@ -13,6 +14,11 @@ export class DepartementComponent implements OnInit{
   departements: Departement[] = [];
   updateDepartement: Departement | null = null;
   deletedCode: string | null = null;
+
+  currentPage: number = 0;
+  pageSize: number = 5;
+  totalItems: number = 0;
+  totalPages: number = 0;
 
   constructor(private departementService: DepartementService) {}
 
@@ -82,10 +88,18 @@ export class DepartementComponent implements OnInit{
     }
   }
 
-  public getDepartements(): void{
-    this.departementService.getDepartements().subscribe((data:any)=>{
-      this.departements = data;
-    });
+  public getDepartements(): void {
+    this.departementService.getDepartements(this.currentPage, this.pageSize)
+      .subscribe((response: DepartementPageResponse) => {
+        this.departements = response.content;
+        this.currentPage = response.currentPage;
+        this.totalItems = response.totalItems;
+        this.totalPages = response.totalPages;
+      });
   }
 
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.getDepartements();
+  }
 }
