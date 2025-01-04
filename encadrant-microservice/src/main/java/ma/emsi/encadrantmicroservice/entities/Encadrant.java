@@ -19,7 +19,4 @@ public class Encadrant {
     private String email;
     private String telephone;
     private String specialite;
-    private Long stageId;
-    @Transient
-    private StageDto stageDto;
 }

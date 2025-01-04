@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EncadrantDto {
+    //private Long id;
     private String matricule;
     private String nom;
     private String prenom;

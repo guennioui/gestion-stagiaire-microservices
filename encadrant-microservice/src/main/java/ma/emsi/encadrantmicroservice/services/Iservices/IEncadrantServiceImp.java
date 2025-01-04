@@ -1,8 +1,6 @@
 package ma.emsi.encadrantmicroservice.services.Iservices;
 
-import ma.emsi.encadrantmicroservice.clients.StageRestClient;
 import ma.emsi.encadrantmicroservice.dtos.EncadrantDto;
-import ma.emsi.encadrantmicroservice.dtos.StageDto;
 import ma.emsi.encadrantmicroservice.entities.Encadrant;
 import ma.emsi.encadrantmicroservice.exceptions.EncadrantAlreadyExistException;
 import ma.emsi.encadrantmicroservice.exceptions.EncadrantNotFoundException;
@@ -13,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,11 +20,9 @@ import java.util.Optional;
 @Service
 public class IEncadrantServiceImp implements IEncadrantService {
     private final EncadrantRepository encadrantRepository;
-    private final StageRestClient stageRestClient;
     @Autowired
-    public IEncadrantServiceImp(EncadrantRepository encadrantRepository, StageRestClient stageRestClient) {
+    public IEncadrantServiceImp(EncadrantRepository encadrantRepository) {
         this.encadrantRepository = encadrantRepository;
-        this.stageRestClient = stageRestClient;
     }
 
     @Override

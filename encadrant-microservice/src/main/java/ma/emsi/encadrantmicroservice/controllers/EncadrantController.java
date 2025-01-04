@@ -64,7 +64,7 @@ public class EncadrantController {
         Page<EncadrantDto> encadrantPage = iEncadrantService.getAll(page, size);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("encadrants", encadrantPage.getContent());
+        response.put("content", encadrantPage.getContent());
         response.put("currentPage", encadrantPage.getNumber());
         response.put("totalItems", encadrantPage.getTotalElements());
         response.put("totalPages", encadrantPage.getTotalPages());

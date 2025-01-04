@@ -20,11 +20,11 @@ export class EncadrantService {
   }
 
   public updateEncadrant(data: Encadrant): Observable<Encadrant> {
-    return this.http.put<Encadrant>(this.apiServerUrl+'/update-encadrant/'+data.matricule, data);
+    return this.http.put<Encadrant>(this.apiServerUrl+'/update/'+data.matricule, data);
   }
 
   public deleteEncadrant(matricule: string):Observable<string>{
-    return this.http.delete<string>(this.apiServerUrl+'/delete-encadrant/'+matricule, {responseType: 'text' as 'json'});
+    return this.http.delete<string>(this.apiServerUrl+'/delete/'+matricule, {responseType: 'text' as 'json'});
   }
 
   public findEncadrantByMatricule(matricule: string):Observable<Encadrant>{
