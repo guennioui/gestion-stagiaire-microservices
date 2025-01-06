@@ -15,6 +15,10 @@ export class StageService {
     return this.http.get<StagePageResponse>(`${this.apiServerUrl}/get-all?page=${page}&size=${size}`);
   }
 
+  public getAll(): Observable<Stage[]> {
+    return this.http.get<Stage[]>(`${this.apiServerUrl}/all`);
+  }
+
   public addStage(data: Stage): Observable<Stage>{
     return this.http.post<Stage>(this.apiServerUrl+'/add-stage', data);
   }
@@ -29,5 +33,13 @@ export class StageService {
 
   public findStageById(stageId: number):Observable<Stage>{
     return this.http.get<Stage>(this.apiServerUrl+'/'+stageId);
+  }
+
+  assignDepartementToStage(stageId: number, codeDepartement: string): Observable<any> {
+    return this.http.post(`${this.apiServerUrl}/assign-departement-To-stage/${stageId}/${codeDepartement}`, {});
+  }
+
+  assignEncadrantToStage(stageId: number, matriculeEncadrant: string): Observable<any> {
+    return this.http.post(`${this.apiServerUrl}/assign-encadrant-To-stage/${stageId}/${matriculeEncadrant}`, {});
   }
 }

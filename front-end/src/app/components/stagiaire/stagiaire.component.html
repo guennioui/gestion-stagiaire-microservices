@@ -55,6 +55,9 @@
                 <a class="view" data-toggle="modal" data-target="#viewStageModal" title="View" (click)="viewStageDetails(stagiaire)">
                   <i class="material-icons">&#xE417;</i>
                 </a>
+                <a class="view" data-toggle="modal" data-target="#viewStageModal_" title="View"  (click)="setMatriculeStagiaire(stagiaire)">
+                  <i class="material-icons"> &#xE7FD;</i>
+                </a>
                 <a class="settings" data-toggle="modal" data-target="#updateStageModal" title="update" (click)="onUpdate(stagiaire)">
                   <i class="material-icons">&#xE8B8;</i>
                 </a>
@@ -224,6 +227,34 @@
             <p><strong>Start Date:&nbsp;&nbsp;&nbsp;</strong>{{stageOfSelectedStagiaire?.startDate}}</p>
             <p><strong>End Date:&nbsp;&nbsp;&nbsp;</strong>{{stageOfSelectedStagiaire?.endDate}}</p>
             <p><strong>Supervisor Name:</strong> ffff</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="viewStageModal_" tabindex="-1" role="dialog" aria-labelledby="viewStageModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="viewStageModalLabel_">Stage Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="assignStageToStagiaire()">
+              <div class="form-group">
+                <label><strong>Stage id:</strong></label>
+                <select class="form-control" [(ngModel)]="selectedStageId" name="selectedStageId" required>
+                  <option value="">Select Stage ID</option>
+                  <option *ngFor="let stage of stages" [value]="stage.stageId">
+                    {{stage.title}}
+                  </option>
+                </select>
+              </div>
+              <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary" [disabled]="!selectedStageId">Submit</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

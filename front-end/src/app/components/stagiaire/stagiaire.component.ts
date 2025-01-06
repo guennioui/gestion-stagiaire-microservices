@@ -14,6 +14,9 @@ import {PageResponse} from "../../models/pageResponse";
 })
 export class StagiaireComponent implements OnInit{
   stagiaires: Stagiaire[] = [];
+  stages: Stage[] = [];
+  selectedStageId: number = 0;
+  matricule: string | null = null;
   updateStagiaire: Stagiaire | null = null;
   deletedMatricule: string | null = null;
   stageOfSelectedStagiaire: Stage | null = null;
@@ -22,10 +25,12 @@ export class StagiaireComponent implements OnInit{
   totalItems: number = 0;
   totalPages: number = 0;
 
-  constructor(private stagiaireService: StagiaireService) {}
+  constructor(private stagiaireService: StagiaireService,
+              private stageService: StageService) {}
 
   ngOnInit(): void {
     this.getStagiaires()
+    this.loadStages();
   }
 
   public addStagiaire(data: NgForm) {
@@ -81,6 +86,10 @@ export class StagiaireComponent implements OnInit{
     }
   }
 
+  setMatriculeStagiaire(stagiaire: Stagiaire){
+    this.matricule = stagiaire.matricule;
+  }
+
   setDeleteId(matricule: string | null ) {
     this.deletedMatricule = matricule;
   }
@@ -110,6 +119,28 @@ export class StagiaireComponent implements OnInit{
         this.totalItems = response.totalItems;
         this.totalPages = response.totalPages;
       });
+  }
+
+  loadStages() {
+    this.stageService.getAll().subscribe(
+      (data: Stage[]) => {
+        this.stages = data;
+      },
+      (error) => {
+        console.error('Error loading stages:', error);
+      }
+    );
+  }
+
+  assignStageToStagiaire(){
+    console.log(this.selectedStageId+'..'+this.matricule);
+    if (this.selectedStageId && this.matricule) {
+      this.stagiaireService.assignStageToStagiaire(this.matricule, this.selectedStageId).subscribe(
+        (response) => {
+          console.log('Stage assigned successfully');
+        }
+      );
+    }
   }
 
   onPageChange(page: number): void {

@@ -4,6 +4,8 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {Departement} from "../../models/departement.model";
 import {DepartementService} from "../../services/departement.service";
 import {DepartementPageResponse} from "../../models/departementPageResponse";
+import {Stage} from "../../models/stage.model";
+import {StageService} from "../../services/stage.service";
 
 @Component({
   selector: 'app-departement',
@@ -12,18 +14,22 @@ import {DepartementPageResponse} from "../../models/departementPageResponse";
 })
 export class DepartementComponent implements OnInit{
   departements: Departement[] = [];
+  stages: Stage[] = [];
+  selectedStageId: number = 0;
+  codeDepartemet: string | null = null;
   updateDepartement: Departement | null = null;
   deletedCode: string | null = null;
-
   currentPage: number = 0;
   pageSize: number = 5;
   totalItems: number = 0;
   totalPages: number = 0;
 
-  constructor(private departementService: DepartementService) {}
+  constructor(private departementService: DepartementService,
+              private stageService: StageService) {}
 
   ngOnInit(): void {
     this.getDepartements();
+    this.loadStages();
   }
 
   public addDepartement(data: NgForm) {
@@ -101,5 +107,31 @@ export class DepartementComponent implements OnInit{
   onPageChange(page: number): void {
     this.currentPage = page;
     this.getDepartements();
+  }
+
+  setCodeDepartement(departement: Departement){
+    this.codeDepartemet = departement.code;
+  }
+
+  assignStageToDepartement(){
+    console.log(this.selectedStageId+'..'+this.codeDepartemet);
+    if (this.selectedStageId && this.codeDepartemet) {
+      this.stageService.assignDepartementToStage(this.selectedStageId, this.codeDepartemet,).subscribe(
+        (response) => {
+          console.log('Stage assigned successfully');
+        }
+      );
+    }
+  }
+
+  loadStages() {
+    this.stageService.getAll().subscribe(
+      (data: Stage[]) => {
+        this.stages = data;
+      },
+      (error) => {
+        console.error('Error loading stages:', error);
+      }
+    );
   }
 }

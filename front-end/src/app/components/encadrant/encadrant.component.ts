@@ -4,6 +4,9 @@ import {NgForm} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
 import {Encadrant} from "../../models/encadrant.model";
 import {EncadrantPageResponse} from "../../models/encadrantPageResponse";
+import {Stagiaire} from "../../models/stagiaire.model";
+import {Stage} from "../../models/stage.model";
+import {StageService} from "../../services/stage.service";
 
 @Component({
   selector: 'app-encadrant',
@@ -12,6 +15,9 @@ import {EncadrantPageResponse} from "../../models/encadrantPageResponse";
 })
 export class EncadrantComponent {
   encadrants: Encadrant[] = [];
+  stages: Stage[] = [];
+  selectedStageId: number = 0;
+  matricule: string | null = null;
   updateEncadrant: Encadrant | null = null;
   deletedMatricule: string | null = null;
   currentPage: number = 0;
@@ -19,10 +25,12 @@ export class EncadrantComponent {
   totalItems: number = 0;
   totalPages: number = 0;
 
-  constructor(private encadrantService: EncadrantService) {}
+  constructor(private encadrantService: EncadrantService,
+              private stageService: StageService) {}
 
   ngOnInit(): void {
     this.getEncadrants()
+    this.loadStages()
   }
 
   public addEncadrant(data: NgForm) {
@@ -71,6 +79,32 @@ export class EncadrantComponent {
 
   setDeleteId(matricule: string | null ) {
     this.deletedMatricule = matricule;
+  }
+
+  setMatriculeEncadrant(encadrant: Encadrant){
+    this.matricule = encadrant.matricule;
+  }
+
+  assignStageToEncadrant(){
+    console.log(this.selectedStageId+'..'+this.matricule);
+    if (this.selectedStageId && this.matricule) {
+      this.stageService.assignEncadrantToStage(this.selectedStageId, this.matricule,).subscribe(
+        (response) => {
+          console.log('Stage assigned successfully');
+        }
+      );
+    }
+  }
+
+  loadStages() {
+    this.stageService.getAll().subscribe(
+      (data: Stage[]) => {
+        this.stages = data;
+      },
+      (error) => {
+        console.error('Error loading stages:', error);
+      }
+    );
   }
 
   onDeleteEncadrant() {
