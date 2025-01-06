@@ -50,7 +50,7 @@
               <td>{{ stage.startDate }}</td>
               <td>{{ stage.endDate }}</td>
               <td style="padding: 0; width: 13%;">
-                <a class="view" data-toggle="modal" data-target="#viewStageModal" title="View">
+                <a class="view" data-toggle="modal" data-target="#viewStageModal" title="View" (click)="setStageId(stage)">
                   <i class="material-icons">&#xE417;</i>
                 </a>
                 <a class="settings" data-toggle="modal" data-target="#updateStageModal" title="update" (click)="onUpdate(stage)">
@@ -206,13 +206,28 @@
           </div>
           <div class="modal-body">
             <!-- Display job offer details here -->
-            <p><strong>ID:</strong> aaaa</p>
-            <p><strong>Start Date:</strong> bbbb</p>
-            <p><strong>End Date:</strong> cccc</p>
-            <p><strong>Subject:</strong> dddd</p>
-            <p><strong>Description:</strong> eeee</p>
-            <p><strong>Supervisor Name:</strong> ffff</p>
-            <p><strong>Supervisor Phone:</strong> gggg</p>
+            <table class="table">
+              <thead>
+              <tr>
+                <th>matricule</th>
+                <th>last name</th>
+                <th>first name</th>
+                <th>email</th>
+                <th>phone</th>
+                <th>school</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let stagiaire of stagiaires">
+                <td>{{ stagiaire.matricule }}</td>
+                <td>{{ stagiaire.lastName }}</td>
+                <td>{{ stagiaire.firstName }}</td>
+                <td>{{ stagiaire.email }}</td>
+                <td>{{ stagiaire.phoneNumber }}</td>
+                <td>{{ stagiaire.schoolName }}</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

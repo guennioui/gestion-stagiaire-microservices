@@ -35,4 +35,8 @@ export class StagiaireService {
   public assignStageToStagiaire(matricule: string, stageId: number):Observable<string>{
     return this.http.post<string>(this.apiServerUrl+'/assign-stagiaire/'+matricule+'/'+stageId, {});
   }
+
+  public getStagiaireByStageId(stageId: number): Observable<Stagiaire[]> {
+    return this.http.get<Stagiaire[]>(this.apiServerUrl+'/find-by-stageId/'+stageId);
+  }
 }

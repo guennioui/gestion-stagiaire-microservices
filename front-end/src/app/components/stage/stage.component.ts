@@ -4,6 +4,8 @@ import {NgForm} from "@angular/forms";
 import {Stage} from "../../models/stage.model";
 import {HttpErrorResponse} from "@angular/common/http";
 import {StagePageResponse} from "../../models/stagePageResponse";
+import {StagiaireService} from "../../services/stagiaire.service";
+import {Stagiaire} from "../../models/stagiaire.model";
 
 @Component({
   selector: 'app-stage',
@@ -12,13 +14,16 @@ import {StagePageResponse} from "../../models/stagePageResponse";
 })
 export class StageComponent implements OnInit{
   stages: Stage[] = [];
+  stagiaires: Stagiaire[] = [];
   updateStage: Stage | null = null;
+  stageId: number | null = null;
   deleteId: number | null = null;
   currentPage: number = 0;
   pageSize: number = 5;
   totalItems: number = 0;
   totalPages: number = 0;
-  constructor(private stageService: StageService) {}
+  constructor(private stageService: StageService,
+              private stagiaireService: StagiaireService) {}
 
   ngOnInit(): void {
     this.getStages();
@@ -98,6 +103,22 @@ export class StageComponent implements OnInit{
       });
   }
 
+  loadStagiaires(stageId: number): void {
+    console.log(stageId);
+    this.stagiaireService.getStagiaireByStageId(stageId).subscribe(
+      (stagiaires: Stagiaire[]) => {
+        this.stagiaires = stagiaires;
+      },
+      (error) => {
+        console.error('Error loading stagiaires:', error);
+      }
+    );
+  }
+
+  setStageId(stage: Stage){
+    this.stageId = stage.stageId;
+    this.loadStagiaires(this.stageId);
+  }
   onPageChange(page: number): void {
     this.currentPage = page;
     this.getStages();
