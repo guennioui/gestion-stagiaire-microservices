@@ -4,15 +4,28 @@ body {
   font-family: 'Varela Round', sans-serif;
   font-size: 13px;
 }
+.container-xl {
+  width: 100%;
+  padding: 20px;
+  margin: 0;
+  max-width: none;
+}
+.table {
+  width: 100%;
+  margin-bottom: 0;
+}
 .table-responsive {
-  margin: 30px 0;
+  margin: 0;
+  width: 100%;
 }
 .table-wrapper {
-  min-width: 1000px;
+  min-width: 100%;
+  width: 100%;
   background: #fff;
   padding: 20px 25px;
   border-radius: 3px;
   box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  margin: 0;
 }
 .table-title {
   padding-bottom: 15px;

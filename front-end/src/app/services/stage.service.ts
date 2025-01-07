@@ -35,11 +35,15 @@ export class StageService {
     return this.http.get<Stage>(this.apiServerUrl+'/'+stageId);
   }
 
-  assignDepartementToStage(stageId: number, codeDepartement: string): Observable<any> {
-    return this.http.post(`${this.apiServerUrl}/assign-departement-To-stage/${stageId}/${codeDepartement}`, {});
+  assignDepartementToStage(stageId: number, codeDepartement: string): Observable<string> {
+    return this.http.post(`${this.apiServerUrl}/assign-departement-To-stage/${stageId}/${codeDepartement}`, {},
+      { responseType: 'text' }
+    );
   }
 
-  assignEncadrantToStage(stageId: number, matriculeEncadrant: string): Observable<any> {
-    return this.http.post(`${this.apiServerUrl}/assign-encadrant-To-stage/${stageId}/${matriculeEncadrant}`, {});
+  assignEncadrantToStage(stageId: number, matriculeEncadrant: string): Observable<string> {
+    return this.http.post(`${this.apiServerUrl}/assign-encadrant-To-stage/${stageId}/${matriculeEncadrant}`, {},
+      { responseType: 'text' }
+    );
   }
 }

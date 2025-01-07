@@ -85,14 +85,20 @@ export class EncadrantComponent {
     this.matricule = encadrant.matricule;
   }
 
-  assignStageToEncadrant(){
-    console.log(this.selectedStageId+'..'+this.matricule);
+  assignStageToEncadrant() {
+    console.log(this.selectedStageId + '..' + this.matricule);
     if (this.selectedStageId && this.matricule) {
-      this.stageService.assignEncadrantToStage(this.selectedStageId, this.matricule,).subscribe(
-        (response) => {
-          console.log('Stage assigned successfully');
+      this.stageService.assignEncadrantToStage(this.selectedStageId, this.matricule).subscribe({
+        next: (response: string) => {
+          alert('Stage ' + this.selectedStageId + ' assigned successfully to encadrant ' + this.matricule);
+        },
+        error: (error) => {
+          console.error('Error assigning stage to encadrant:', error);
+          alert('Error assigning stage to encadrant. Please try again.');
         }
-      );
+      });
+    } else {
+      alert('Please select both a stage and an encadrant before assigning.');
     }
   }
 

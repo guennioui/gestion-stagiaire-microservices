@@ -31,7 +31,6 @@ export class DepartementService {
   public deleteDepartement(code: string):Observable<string>{
     return this.http.delete<string>(this.apiServerUrl+'/delete/'+code, {responseType: 'text' as 'json'});
   }
-
   public findDepartementByCode(code: string):Observable<Departement>{
     return this.http.get<Departement>(this.apiServerUrl+'/'+code);
   }

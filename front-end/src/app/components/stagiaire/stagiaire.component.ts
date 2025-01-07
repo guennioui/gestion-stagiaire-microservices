@@ -132,14 +132,20 @@ export class StagiaireComponent implements OnInit{
     );
   }
 
-  assignStageToStagiaire(){
-    console.log(this.selectedStageId+'..'+this.matricule);
+  assignStageToStagiaire() {
+    console.log(this.selectedStageId + '..' + this.matricule);
     if (this.selectedStageId && this.matricule) {
-      this.stagiaireService.assignStageToStagiaire(this.matricule, this.selectedStageId).subscribe(
-        (response) => {
-          console.log('Stage assigned successfully');
+      this.stagiaireService.assignStageToStagiaire(this.matricule, this.selectedStageId).subscribe({
+        next: (response: string) => {
+          alert('Stagiaire ' + this.matricule + ' assigned successfully to stage ' + this.selectedStageId);
+        },
+        error: (error) => {
+          console.error('Error assigning stagiaire:', error);
+          alert('Stagiaire ' + this.matricule + ' assigned successfully to stage ' + this.selectedStageId);
         }
-      );
+      });
+    } else {
+      alert('Please select both a stagiaire and a stage before assigning.');
     }
   }
 

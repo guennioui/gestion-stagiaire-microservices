@@ -113,14 +113,20 @@ export class DepartementComponent implements OnInit{
     this.codeDepartemet = departement.code;
   }
 
-  assignStageToDepartement(){
-    console.log(this.selectedStageId+'..'+this.codeDepartemet);
+  assignStageToDepartement() {
+    console.log(this.selectedStageId + '..' + this.codeDepartemet);
     if (this.selectedStageId && this.codeDepartemet) {
-      this.stageService.assignDepartementToStage(this.selectedStageId, this.codeDepartemet,).subscribe(
-        (response) => {
-          console.log('Stage assigned successfully');
+      this.stageService.assignDepartementToStage(this.selectedStageId, this.codeDepartemet).subscribe({
+        next: (response: string) => {
+          alert('Stage ' + this.selectedStageId + ' assigned successfully to department ' + this.codeDepartemet);
+        },
+        error: (error) => {
+          console.error('Error assigning stage to department:', error);
+          alert('Error assigning stage to department. Please try again.');
         }
-      );
+      });
+    } else {
+      alert('Please select both a stage and a department before assigning.');
     }
   }
 
