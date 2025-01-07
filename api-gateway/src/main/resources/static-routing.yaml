@@ -1,5 +1,5 @@
 server:
-  port: 9095
+  port: 9090
 
 spring:
   application:
@@ -15,4 +15,12 @@ spring:
           uri : lb://STAGE-SERVICE
           predicates:
             - Path= /api/stage/**
+        - id: encadrant-microservice
+          uri: lb://ENCADRANT-SERVICE
+          predicates:
+            - Path= /api/encadrant/**
+        - id: departement-microservice
+          uri: lb://DEPARTEMENT-SERVICE
+          predicates:
+            - Path= /api/departement/**
 

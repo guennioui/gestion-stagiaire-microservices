@@ -78,13 +78,13 @@ public class StageController {
     public ResponseEntity<?> assignDepartementToStage(@PathVariable  Long stageId, @PathVariable String codeDepartement)
             throws StageNotFoundException{
         this.stageService.assignDepartementToStage(stageId, codeDepartement);
-        return new ResponseEntity<>(HttpStatus.valueOf(200));
+        return ResponseEntity.ok("le stage: "+stageId+" a été bien assigné au departement: "+codeDepartement);
     }
 
     @PostMapping(path = "/assign-encadrant-To-stage/{stageId}/{matriculeEncadrant}")
     public ResponseEntity<?> assignEncadrantToStage(@PathVariable Long stageId, @PathVariable String matriculeEncadrant)
             throws StageNotFoundException{
         this.stageService.assignEncadrantToStage(stageId, matriculeEncadrant);
-        return new ResponseEntity<>(HttpStatus.valueOf(200));
+        return ResponseEntity.ok("l'encadrant: "+matriculeEncadrant+" a été bien assigné au stage: "+stageId);
     }
 }
